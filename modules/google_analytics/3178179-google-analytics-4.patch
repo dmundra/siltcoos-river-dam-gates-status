@@ -1,0 +1,81 @@
+From fb50f617c5068bed2ada316bf96333f482364990 Mon Sep 17 00:00:00 2001
+From: DamienLAGUERRE <DamienLAGUERRE@993490.no-reply.drupal.org>
+Date: Tue, 1 Dec 2020 13:12:52 -0800
+Subject: [PATCH] Issue #3178179: Support new Google Analytics 4
+
+---
+ google_analytics.install                          | 2 +-
+ google_analytics.module                           | 2 +-
+ src/Form/GoogleAnalyticsAdminSettingsForm.php     | 8 ++++----
+ tests/src/Functional/GoogleAnalyticsBasicTest.php | 2 +-
+ 4 files changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/google_analytics.install b/google_analytics.install
+index 1b51976..9b7cbab 100644
+--- a/google_analytics.install
++++ b/google_analytics.install
+@@ -41,7 +41,7 @@ function google_analytics_requirements($phase) {
+     $config = \Drupal::config('google_analytics.settings');
+ 
+     // Raise warning if Google user account has not been set yet.
+-    if (!preg_match('/^UA-\d+-\d+$/', $config->get('account'))) {
++    if (!preg_match('/^(?:UA-\d+-\d+|G-\w+)$/', $config->get('account'))) {
+       $requirements['google_analytics_account'] = [
+         'title' => t('Google Analytics module'),
+         'description' => t('Google Analytics module has not been configured yet. Please configure its settings from the <a href=":url">Google Analytics settings page</a>.', [':url' => Url::fromRoute('google_analytics.admin_settings_form')->toString()]),
+diff --git a/google_analytics.module b/google_analytics.module
+index 0182a5d..bb27eff 100644
+--- a/google_analytics.module
++++ b/google_analytics.module
+@@ -83,7 +83,7 @@ function google_analytics_page_attachments(array &$page) {
+   // 2. Track page views based on visibility value.
+   // 3. Check if we should track the currently active user's role.
+   // 4. Ignore pages visibility filter for 404 or 403 status codes.
+-  if (preg_match('/^UA-\d+-\d+$/', $id) && (_google_analytics_visibility_pages() || in_array($status, $trackable_status_codes)) && _google_analytics_visibility_user($account)) {
++  if (preg_match('/^(?:UA-\d+-\d+|G-\w+)$/', $id) && (_google_analytics_visibility_pages() || in_array($status, $trackable_status_codes)) && _google_analytics_visibility_user($account)) {
+     // Init variables.
+     $debug = $config->get('debug');
+     $url_custom = '';
+diff --git a/src/Form/GoogleAnalyticsAdminSettingsForm.php b/src/Form/GoogleAnalyticsAdminSettingsForm.php
+index 2ab6e17..1999974 100644
+--- a/src/Form/GoogleAnalyticsAdminSettingsForm.php
++++ b/src/Form/GoogleAnalyticsAdminSettingsForm.php
+@@ -74,9 +74,9 @@ class GoogleAnalyticsAdminSettingsForm extends ConfigFormBase {
+ 
+     $form['general']['google_analytics_account'] = [
+       '#default_value' => $config->get('account'),
+-      '#description' => $this->t('This ID is unique to each site you want to track separately, and is in the form of UA-xxxxxxx-yy. To get a Web Property ID, <a href=":analytics">register your site with Google Analytics</a>, or if you already have registered your site, go to your Google Analytics Settings page to see the ID next to every site profile. <a href=":webpropertyid">Find more information in the documentation</a>.', [':analytics' => 'https://marketingplatform.google.com/about/analytics/', ':webpropertyid' => Url::fromUri('https://developers.google.com/analytics/resources/concepts/gaConceptsAccounts', ['fragment' => 'webProperty'])->toString()]),
++      '#description' => $this->t('This ID is unique to each site you want to track separately, and is in the form of UA-xxxxxxx-yy or G-xxxxxxxxx. To get a Web Property ID, <a href=":analytics">register your site with Google Analytics</a>, or if you already have registered your site, go to your Google Analytics Settings page to see the ID next to every site profile. <a href=":webpropertyid">Find more information in the documentation</a>.', [':analytics' => 'https://marketingplatform.google.com/about/analytics/', ':webpropertyid' => Url::fromUri('https://developers.google.com/analytics/resources/concepts/gaConceptsAccounts', ['fragment' => 'webProperty'])->toString()]),
+       '#maxlength' => 20,
+-      '#placeholder' => 'UA-',
++      '#placeholder' => 'UA- or G-',
+       '#required' => TRUE,
+       '#size' => 20,
+       '#title' => $this->t('Web Property ID'),
+@@ -626,8 +626,8 @@ class GoogleAnalyticsAdminSettingsForm extends ConfigFormBase {
+     // Replace all type of dashes (n-dash, m-dash, minus) with normal dashes.
+     $form_state->setValue('google_analytics_account', str_replace(['–', '—', '−'], '-', $form_state->getValue('google_analytics_account')));
+ 
+-    if (!preg_match('/^UA-\d+-\d+$/', $form_state->getValue('google_analytics_account'))) {
+-      $form_state->setErrorByName('google_analytics_account', $this->t('A valid Google Analytics Web Property ID is case sensitive and formatted like UA-xxxxxxx-yy.'));
++    if (!preg_match('/^(?:UA-\d+-\d+|G-\w+)$/', $form_state->getValue('google_analytics_account'))) {
++      $form_state->setErrorByName('google_analytics_account', $this->t('A valid Google Analytics Web Property ID is case sensitive and formatted like UA-xxxxxxx-yy or G-xxxxxxxxxx.'));
+     }
+ 
+     // If multiple top-level domains has been selected, a domain names list is
+diff --git a/tests/src/Functional/GoogleAnalyticsBasicTest.php b/tests/src/Functional/GoogleAnalyticsBasicTest.php
+index 3e1de41..5df8763 100644
+--- a/tests/src/Functional/GoogleAnalyticsBasicTest.php
++++ b/tests/src/Functional/GoogleAnalyticsBasicTest.php
+@@ -93,7 +93,7 @@ class GoogleAnalyticsBasicTest extends BrowserTestBase {
+     // Check for account code validation.
+     $edit['google_analytics_account'] = $this->randomMachineName(2);
+     $this->drupalPostForm('admin/config/system/google-analytics', $edit, $this->t('Save configuration'));
+-    $this->assertRaw($this->t('A valid Google Analytics Web Property ID is case sensitive and formatted like UA-xxxxxxx-yy.'));
++    $this->assertRaw($this->t('A valid Google Analytics Web Property ID is case sensitive and formatted like UA-xxxxxxx-yy or G-xxxxxxxxxx.'));
+ 
+     // User should have access to code snippets.
+     $this->assertFieldByName('google_analytics_codesnippet_create');
+-- 
+GitLab
+
