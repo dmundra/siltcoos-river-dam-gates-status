@@ -1,13 +1,8 @@
 name: Testing multilingual
 type: profile
 description: 'Minimal profile for running tests with a multilingual installer.'
-# version: VERSION
+version: VERSION
 hidden: true
 install:
   - locale
   - tour
-
-# Information added by Drupal.org packaging script on 2021-04-07
-version: '9.1.6'
-project: 'drupal'
-datestamp: 1617795526

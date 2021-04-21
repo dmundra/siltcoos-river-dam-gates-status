@@ -1,9 +1,4 @@
 type: theme_engine
 name: Nyan cat
-# version: VERSION
+version: VERSION
 package: Core
-
-# Information added by Drupal.org packaging script on 2021-04-07
-version: '9.1.6'
-project: 'drupal'
-datestamp: 1617795526

@@ -6,8 +6,3 @@ dependencies:
   - drupal:image
   - drupal:media_library
   - drupal:media_test_source
-
-# Information added by Drupal.org packaging script on 2021-04-07
-version: '9.1.6'
-project: 'drupal'
-datestamp: 1617795526
