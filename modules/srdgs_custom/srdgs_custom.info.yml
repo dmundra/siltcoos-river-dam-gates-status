@@ -1,0 +1,7 @@
+name: SRDGS Customizations
+description: Adjusts the dam gates status content type for the Siltcoos River Dam Gates Status site.
+package: Custom
+
+type: module
+core_version_requirement: ^8.8 || ^9
+version: 9.x-1.0
