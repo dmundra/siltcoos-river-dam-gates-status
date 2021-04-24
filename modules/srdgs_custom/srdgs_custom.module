@@ -13,11 +13,11 @@ use Drupal\Core\Form\FormStateInterface;
 function srdgs_custom_form_node_dam_gates_status_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   // Create form.
   $current_dam_gate_status_view = views_get_view_result('dam_gates_status');
-  
+
   $field_status = 'field_status';
   $status = $current_dam_gate_status_view[0]->_entity->get($field_status)->getValue();
   $form[$field_status]['widget']['#default_value'] = $status[0]['value'];
-  
+
   $field_expected_duration = 'field_expected_duration';
   $expected_duration = $current_dam_gate_status_view[0]->_entity->get($field_expected_duration)->getValue();
   $form[$field_expected_duration]['widget']['#default_value'] = $expected_duration[0]['value'];
