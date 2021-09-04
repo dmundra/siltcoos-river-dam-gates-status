@@ -27,4 +27,4 @@ jobs:
           ./vendor/bin/phpcs \
             --standard="Drupal,DrupalPractice" -n \
             --extensions="php,module,inc,install,test,profile,theme" \
-            modules/srdgs_custom
+            modules/srdgs_custom modules/user_welcome
