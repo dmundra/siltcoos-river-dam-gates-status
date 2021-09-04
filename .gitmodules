@@ -1,0 +1,3 @@
+[submodule "modules/user_welcome"]
+	path = modules/user_welcome
+	url = git@github.com:dmundra/user_welcome.git
