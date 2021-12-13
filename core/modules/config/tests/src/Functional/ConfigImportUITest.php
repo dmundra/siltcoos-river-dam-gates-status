@@ -119,11 +119,11 @@ class ConfigImportUITest extends BrowserTestBase {
 
     // Verify that both appear as ready to import.
     $this->drupalGet('admin/config/development/configuration');
-    $this->assertRaw('<td>' . $name);
-    $this->assertRaw('<td>' . $dynamic_name);
-    $this->assertRaw('<td>core.extension');
-    $this->assertRaw('<td>system.theme');
-    $this->assertRaw('<td>automated_cron.settings');
+    $this->assertSession()->responseContains('<td>' . $name);
+    $this->assertSession()->responseContains('<td>' . $dynamic_name);
+    $this->assertSession()->responseContains('<td>core.extension');
+    $this->assertSession()->responseContains('<td>system.theme');
+    $this->assertSession()->responseContains('<td>automated_cron.settings');
     $this->assertSession()->buttonExists('Import all');
 
     // Import and verify that both do not appear anymore.
@@ -183,8 +183,11 @@ class ConfigImportUITest extends BrowserTestBase {
     $sync->delete('text.settings');
 
     $system_theme = $this->config('system.theme')->get();
-    $system_theme['default'] = 'stark';
-    $system_theme['admin'] = 'stark';
+    $system_theme = [
+      '_core' => $system_theme['_core'],
+      'admin' => 'stark',
+      'default' => 'stark',
+    ];
     $sync->write('system.theme', $system_theme);
 
     // Set the state system to record installations and uninstallations.
@@ -193,9 +196,9 @@ class ConfigImportUITest extends BrowserTestBase {
 
     // Verify that both appear as ready to import.
     $this->drupalGet('admin/config/development/configuration');
-    $this->assertRaw('<td>core.extension');
-    $this->assertRaw('<td>system.theme');
-    $this->assertRaw('<td>automated_cron.settings');
+    $this->assertSession()->responseContains('<td>core.extension');
+    $this->assertSession()->responseContains('<td>system.theme');
+    $this->assertSession()->responseContains('<td>automated_cron.settings');
 
     // Import and verify that both do not appear anymore.
     $this->submitForm([], 'Import all');

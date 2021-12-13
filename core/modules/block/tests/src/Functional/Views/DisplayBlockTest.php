@@ -386,8 +386,8 @@ class DisplayBlockTest extends ViewTestBase {
     $cached_id_token = Crypt::hmacBase64($cached_id, Settings::getHashSalt() . $this->container->get('private_key')->get());
     // @see \Drupal\contextual\Tests\ContextualDynamicContextTest:assertContextualLinkPlaceHolder()
     // Check existence of the contextual link placeholders.
-    $this->assertRaw('<div' . new Attribute(['data-contextual-id' => $id, 'data-contextual-token' => $id_token]) . '></div>');
-    $this->assertRaw('<div' . new Attribute(['data-contextual-id' => $cached_id, 'data-contextual-token' => $cached_id_token]) . '></div>');
+    $this->assertSession()->responseContains('<div' . new Attribute(['data-contextual-id' => $id, 'data-contextual-token' => $id_token]) . '></div>');
+    $this->assertSession()->responseContains('<div' . new Attribute(['data-contextual-id' => $cached_id, 'data-contextual-token' => $cached_id_token]) . '></div>');
 
     // Get server-rendered contextual links.
     // @see \Drupal\contextual\Tests\ContextualDynamicContextTest:renderContextualLinks()
@@ -396,8 +396,8 @@ class DisplayBlockTest extends ViewTestBase {
     $this->getSession()->getDriver()->getClient()->request('POST', $url, $post);
     $this->assertSession()->statusCodeEquals(200);
     $json = Json::decode($this->getSession()->getPage()->getContent());
-    $this->assertSame('<ul class="contextual-links"><li class="block-configure"><a href="' . base_path() . 'admin/structure/block/manage/' . $block->id() . '">Configure block</a></li><li class="entityviewedit-form"><a href="' . base_path() . 'admin/structure/views/view/test_view_block/edit/block_1">Edit view</a></li></ul>', $json[$id]);
-    $this->assertSame('<ul class="contextual-links"><li class="block-configure"><a href="' . base_path() . 'admin/structure/block/manage/' . $cached_block->id() . '">Configure block</a></li><li class="entityviewedit-form"><a href="' . base_path() . 'admin/structure/views/view/test_view_block/edit/block_1">Edit view</a></li></ul>', $json[$cached_id]);
+    $this->assertSame('<ul class="contextual-links"><li class="block-configure"><a href="' . base_path() . 'admin/structure/block/manage/' . $block->id() . '">Configure block</a></li><li class="block-remove"><a href="' . base_path() . 'admin/structure/block/manage/' . $block->id() . '/delete">Remove block</a></li><li class="entityviewedit-form"><a href="' . base_path() . 'admin/structure/views/view/test_view_block/edit/block_1">Edit view</a></li></ul>', $json[$id]);
+    $this->assertSame('<ul class="contextual-links"><li class="block-configure"><a href="' . base_path() . 'admin/structure/block/manage/' . $cached_block->id() . '">Configure block</a></li><li class="block-remove"><a href="' . base_path() . 'admin/structure/block/manage/' . $cached_block->id() . '/delete">Remove block</a></li><li class="entityviewedit-form"><a href="' . base_path() . 'admin/structure/views/view/test_view_block/edit/block_1">Edit view</a></li></ul>', $json[$cached_id]);
   }
 
 }
