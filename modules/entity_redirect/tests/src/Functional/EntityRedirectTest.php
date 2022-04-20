@@ -14,9 +14,11 @@ class EntityRedirectTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = [
+  protected static $modules = [
     'node',
     'entity_redirect',
+    'layout_builder',
+    'layout_discovery',
   ];
 
   /**
@@ -36,7 +38,12 @@ class EntityRedirectTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected $defaultTheme = 'stark';
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function setUp() :void {
     parent::setUp();
 
     $this->nodeType = $this->drupalCreateContentType(['type' => 'article']);
@@ -50,9 +57,8 @@ class EntityRedirectTest extends BrowserTestBase {
         'active' => FALSE,
         'destination' => 'external',
         'external' => 'https://google.ca',
-        'url' => '/user/2/'
-
-      ]
+        'url' => '/user/2/',
+      ],
     ];
     $this->nodeType->setThirdPartySetting('entity_redirect',
       'redirect',
@@ -64,16 +70,21 @@ class EntityRedirectTest extends BrowserTestBase {
     ]));
   }
 
+  /**
+   * Testing redirect routes.
+   */
   public function testBasicRedirect() {
     $edit = [
       'title[0][value]' => $this->randomMachineName(),
     ];
-    $this->drupalPostForm('/node/add/article', $edit, t('Save'));
+    $this->drupalGet('/node/add/article');
+    $this->submitForm($edit, 'Save');
     $session = $this->assertSession();
     $session->addressEquals('/node/1');
     $session->statusCodeEquals(200);
 
-    $this->drupalPostForm('/node/1/edit', $edit, t('Save'));
+    $this->drupalGet('/node/1/edit');
+    $this->submitForm($edit, 'Save');
     $session->addressEquals('/user/2');
     $session->statusCodeEquals(200);
 
@@ -82,7 +93,8 @@ class EntityRedirectTest extends BrowserTestBase {
       'redirect',
       $this->settings
     )->save();
-    $this->drupalPostForm('/node/add/article/', $edit, t('Save'));
+    $this->drupalGet('/node/add/article/');
+    $this->submitForm($edit, 'Save');
     $this->assertEquals('https://www.google.ca/', $this->getUrl());
 
     $this->settings['edit']['destination'] = 'add_form';
@@ -90,7 +102,8 @@ class EntityRedirectTest extends BrowserTestBase {
       'redirect',
       $this->settings
     )->save();
-    $this->drupalPostForm('/node/2/edit', $edit, t('Save'));
+    $this->drupalGet('/node/2/edit');
+    $this->submitForm($edit, 'Save');
     $session->addressEquals('/node/add/article');
     $session->statusCodeEquals(200);
 
@@ -99,7 +112,8 @@ class EntityRedirectTest extends BrowserTestBase {
       'redirect',
       $this->settings
     )->save();
-    $this->drupalPostForm('/node/2/edit', $edit, t('Save'));
+    $this->drupalGet('/node/2/edit');
+    $this->submitForm($edit, 'Save');
     $session->addressEquals('/node/2');
     $session->statusCodeEquals(200);
 
@@ -108,11 +122,52 @@ class EntityRedirectTest extends BrowserTestBase {
       'redirect',
       $this->settings
     )->save();
-    $this->drupalPostForm('/node/2/edit', $edit, t('Save'));
+    $this->drupalGet('/node/2/edit');
+    $this->submitForm($edit, 'Save');
     $session->addressEquals('/node/2/edit');
     $session->statusCodeEquals(200);
 
-  }
+    $this->settings['edit']['destination'] = 'previous_page';
+    $this->nodeType->setThirdPartySetting('entity_redirect',
+      'redirect',
+      $this->settings
+    )->save();
+    $this->drupalGet('/node/2/edit');
+    $this->submitForm($edit, 'Save');
+    $this->assertStringContainsString('/node/2/edit', $this->getSession()->getCurrentUrl());
+    $session->statusCodeEquals(200);
 
+    \Drupal::entityTypeManager()
+      ->getStorage('entity_view_display')
+      ->create([
+        'targetEntityType' => 'node',
+        'bundle' => 'article',
+        'mode' => 'full',
+      ])
+      ->enable()
+      ->setThirdPartySetting('layout_builder', 'enabled', TRUE)
+      ->setThirdPartySetting('layout_builder', 'allow_custom', TRUE)
+      ->save();
+    $settings = [
+      'add' => [
+        'active' => TRUE,
+        'destination' => 'layout_builder',
+      ],
+    ];
+    $this->nodeType->setThirdPartySetting('entity_redirect',
+      'redirect',
+      $settings
+    )->save();
+    $this->drupalLogin($this->drupalCreateUser([
+      'configure any layout',
+      'create article content',
+    ]));
+    $this->drupalGet('/node/add/article');
+    $this->submitForm($edit, 'Save');
+    $session = $this->assertSession();
+    $this->assertStringContainsString('/node/3/layout', $this->getSession()->getCurrentUrl());
+    $session->statusCodeEquals(200);
+
+  }
 
 }

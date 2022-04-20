@@ -41,3 +41,9 @@ media.type.*.third_party.entity_redirect:
 
 taxonomy.vocabulary.*.third_party.entity_redirect:
   <<: *settings
+
+contact.form.*.third_party.entity_redirect:
+  <<: *settings
+
+paragraphs.paragraphs_type.*.third_party.entity_redirect:
+  <<: *settings

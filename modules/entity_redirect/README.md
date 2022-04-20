@@ -5,12 +5,16 @@ is configurable per bundle. Also, given sufficient permissions (and presuming it
 is enabled for that specific content/bundle), individual users can configure
 their own redirects (on their *profile edit page*).
 
-Provides four different types of redirection:
+Provides seven different types of redirection:
 
 - Default: This will not impact the entity but will just go to the default.
 - Add Form: Redirect to a new add form for the content type/entity.
+- Return to Edit Form: Redirect back to the edit form of the entity.
 - Local Url: provide a local url in the form of `/about` to go to any page on
 the site.
+- Created entity: Redirect to the view of the entity.
+- Go to Layout Builder Page: *If Layout Builder module is enabled*, redirect to
+the layout builder page of the entity.
 - External Url: Same as local url but to an external location. *Note*: this is
 only available to users with the permission `set external entity redirects`.
 
@@ -45,5 +49,14 @@ With sufficient permissions' per user personalization can done on the users'
 profile edit pages.
 
 ## FAQ
-Any questions? Ask away on the issue queue. Alternatively feel free to contact
-Nick via Twitter (@NDickinsonWilde), or email (nick@nickdickinsonwilde.ca).
+Any questions? Ask away on the issue queue.
+Alternatively feel free to contact the maintainers.
+
+## MAINTAINERS
+* Nick Dickinson-Wilde (NickDickinsonWilde)
+   * User - https://www.drupal.org/u/nickdickinsonwilde
+   * Twitter - @NDickinsonWilde
+   * Email - nick@nickdickinsonwilde.ca
+* Henrique Mendes (hmendes)
+   * User - https://www.drupal.org/u/hmendes
+   * Email - hmendes@ciandt.com
