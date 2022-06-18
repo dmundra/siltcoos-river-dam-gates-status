@@ -16,6 +16,7 @@
     ],
     "require": {
         "composer/installers": "^1.9",
+        "cweagans/composer-patches": "^1.7",
         "drupal/auto_entitylabel": "^3.0@beta",
         "drupal/block_content_permissions": "^1.10",
         "drupal/core-composer-scaffold": "^9.1",
@@ -41,7 +42,8 @@
             "composer/installers": true,
             "drupal/core-composer-scaffold": true,
             "drupal/core-project-message": true,
-            "drupal/core-vendor-hardening": true
+            "drupal/core-vendor-hardening": true,
+            "cweagans/composer-patches": true
         }
     },
     "extra": {
