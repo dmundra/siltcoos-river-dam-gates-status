@@ -27,7 +27,6 @@
         "drupal/google_analytics": "^4.0",
         "drupal/metatag": "^1.19",
         "drupal/pathauto": "^1.9",
-        "drupal/upgrade_status": "^3.18",
         "drush/drush": "^10.4"
     },
     "conflict": {
