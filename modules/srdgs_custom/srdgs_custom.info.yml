@@ -3,5 +3,5 @@ description: Adjusts the dam gates status content type for the Siltcoos River Da
 package: Custom
 
 type: module
-core_version_requirement: ^8.8 || ^9
+core_version_requirement: ^8.8 || ^9 || ^10
 version: 9.x-1.0
