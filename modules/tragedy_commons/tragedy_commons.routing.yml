@@ -1,0 +1,50 @@
+tragedy_commons.base:
+  path: '/tragedy_of_the_commons'
+  defaults:
+    _controller: '\Drupal\tragedy_commons\Controller\DefaultController::commons'
+    _title: 'Tragedy of the Commons'
+  requirements:
+    _permission: 'view tragedy of the commons'
+
+tragedy_commons.pdgame1:
+  path: '/tragedy_of_the_commons/pdgame1'
+  defaults:
+    _controller: '\Drupal\tragedy_commons\Controller\DefaultController::pdgame1'
+    _title: 'Prisoners Dilemma Game 1'
+  requirements:
+    _permission: 'view tragedy of the commons'
+
+tragedy_commons.pdgame2:
+  path: '/tragedy_of_the_commons/pdgame2'
+  defaults:
+    _controller: '\Drupal\tragedy_commons\Controller\DefaultController::pdgame2'
+    _title: 'Prisoners Dilemma Game 2'
+  requirements:
+    _permission: 'view tragedy of the commons'
+
+#entity.tragedy_commons.collection:
+#  path: '/admin/config/development/tragedy_commons/results'
+#  requirements:
+#    _permission: 'view tragedy of the commons results'
+#  options:
+#    _admin_route: FALSE
+#
+#entity.tragedy_commons.canonical:
+#  path: '/admin/config/development/tragedy_commons/results/{tragedy_commons}'
+#  requirements:
+#    _permission: 'view tragedy of the commons results'
+#  defaults:
+#    _entity_view: 'tragedy_commons'
+#    _title: 'Tragedy of the Commons Result'
+#  options:
+#    _admin_route: FALSE
+#
+#tragedy_commons.config_form:
+#  path: '/admin/config/development/tragedy_commons/settings'
+#  defaults:
+#    _form: '\Drupal\tragedy_commons\Form\TragedyCommonsConfigForm'
+#    _title: 'Tragedy of the Commons Settings'
+#  requirements:
+#    _permission: 'administer tragedy of the commons'
+#  options:
+#    _admin_route: TRUE

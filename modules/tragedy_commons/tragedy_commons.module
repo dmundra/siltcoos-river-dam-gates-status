@@ -1,0 +1,28 @@
+<?php
+
+/**
+ * @file
+ * Drupal hooks for supporting tragedy_commons operations.
+ */
+
+use Drupal\Component\Utility\Html;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\markdown\Markdown;
+
+/**
+ * Implements hook_help().
+ */
+function tragedy_commons_help($route_name, RouteMatchInterface $route_match) {
+  if ($route_name == 'help.page.tragedy_commons') {
+    if (\Drupal::moduleHandler()->moduleExists('markdown')) {
+      // Use the Markdown filter to render the README.
+      // @phpstan-ignore-next-line (Class is optionally included.)
+      return Markdown::create()->loadFile(__DIR__ . '/README.md');
+    }
+    else {
+      $text = file_get_contents(__DIR__ . '/README.md');
+      return '<pre>' . Html::escape($text) . '</pre>';
+    }
+  }
+  return NULL;
+}

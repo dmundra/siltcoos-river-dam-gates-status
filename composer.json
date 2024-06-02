@@ -27,6 +27,7 @@
         "drupal/metatag": "^2.0",
         "drupal/nice_filemime": "^2.0",
         "drupal/pathauto": "^1.9",
+        "drupal/tragedy_commons": "^1.0@alpha",
         "drush/drush": "^12.4"
     },
     "conflict": {

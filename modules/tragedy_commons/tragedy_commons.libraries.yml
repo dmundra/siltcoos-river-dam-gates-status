@@ -1,0 +1,6 @@
+pdgame:
+  version: VERSION
+  css:
+    theme:
+      css/pdgame.css: { }
+  dependencies: {}

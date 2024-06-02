@@ -1,0 +1,11 @@
+name: 'Tragedy of the commons'
+type: module
+description: 'Illustrate the tragedy of the commons'
+configure: tragedy_commons.config_form
+core_version_requirement: ^10 || ^11
+package: Development
+
+# Information added by Drupal.org packaging script on 2024-06-02
+version: '1.0.1-alpha1'
+project: 'tragedy_commons'
+datestamp: 1717360467

@@ -1,0 +1,33 @@
+tragedy_commons.base:
+  title: 'Tragedy of the Commons'
+  route_name: tragedy_commons.base
+  description: 'Tragedy of the Commons'
+  weight: 5
+
+tragedy_commons.pdgame1:
+  title: 'Prisoners Dilemma Game 1'
+  route_name: tragedy_commons.pdgame1
+  description: 'Prisoners Dilemma Game 1'
+  parent: tragedy_commons.base
+  weight: 15
+
+tragedy_commons.pdgame2:
+  title: 'Prisoners Dilemma Game 2'
+  route_name: tragedy_commons.pdgame2
+  description: 'Prisoners Dilemma Game 2'
+  parent: tragedy_commons.base
+  weight: 20
+
+#entity.tragedy_commons.collection:
+#  title: 'Tragedy of the Commons Submissions Results'
+#  route_name: entity.batch_op_log.collection
+#  description: 'View the results of all submissions.'
+#  parent: tragedy_commons.base
+#  weight: 5
+#
+#tragedy_commons.config_form:
+#  title: 'Tragedy of the Commons Settings'
+#  route_name: tragedy_commons.config_form
+#  description: 'Manage settings for Tragedy of the Commons'
+#  parent: tragedy_commons.base
+#  weight: 10
