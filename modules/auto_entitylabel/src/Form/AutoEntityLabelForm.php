@@ -4,6 +4,7 @@ namespace Drupal\auto_entitylabel\Form;
 
 use Drupal\auto_entitylabel\AutoEntityLabelManager;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Config\TypedConfigManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\ConfigFormBase;
@@ -83,6 +84,8 @@ class AutoEntityLabelForm extends ConfigFormBase {
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config Factory.
+   * @param \Drupal\Core\Config\TypedConfigManagerInterface|null $typed_config_manager
+   *   The typed config manager.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager service.
    * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
@@ -94,12 +97,13 @@ class AutoEntityLabelForm extends ConfigFormBase {
    */
   public function __construct(
     ConfigFactoryInterface $config_factory,
+    TypedConfigManagerInterface $typed_config_manager,
     EntityTypeManagerInterface $entity_type_manager,
     RouteMatchInterface $route_match,
     ModuleHandlerInterface $moduleHandler,
-    AccountInterface $user
+    AccountInterface $user,
   ) {
-    parent::__construct($config_factory);
+    parent::__construct($config_factory, $typed_config_manager);
     $this->entityTypeManager = $entity_type_manager;
     $this->routeMatch = $route_match;
     $route_options = $this->routeMatch->getRouteObject()->getOptions();
@@ -110,6 +114,20 @@ class AutoEntityLabelForm extends ConfigFormBase {
     $this->entityTypeBundleOf = $entity_type->getEntityType()->getBundleOf();
     $this->moduleHandler = $moduleHandler;
     $this->user = $user;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('config.factory'),
+      $container->get('config.typed'),
+      $container->get('entity_type.manager'),
+      $container->get('current_route_match'),
+      $container->get('module_handler'),
+      $container->get('current_user')
+    );
   }
 
   /**
@@ -133,19 +151,6 @@ class AutoEntityLabelForm extends ConfigFormBase {
    */
   public function getFormId() {
     return 'auto_entitylabel_settings_form';
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('config.factory'),
-      $container->get('entity_type.manager'),
-      $container->get('current_route_match'),
-      $container->get('module_handler'),
-      $container->get('current_user')
-    );
   }
 
   /**
