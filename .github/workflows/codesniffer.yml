@@ -8,11 +8,11 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php_version: ['8.1']
+        php_version: ['8.2']
 
     steps:
       - name: Check out code.
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up PHP ${{ matrix.php_version }}.
         uses: shivammathur/setup-php@v2
