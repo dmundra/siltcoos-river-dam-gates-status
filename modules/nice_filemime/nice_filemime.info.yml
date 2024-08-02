@@ -1,9 +1,9 @@
 name: 'Nice Filemime'
 description: 'Provides nicer, more logical and user friendly filemime names'
 type: module
-core_version_requirement: ^8 || ^9 || ^10
+core_version_requirement: ^8 || ^9 || ^10 || ^11
 
-# Information added by Drupal.org packaging script on 2023-09-08
-version: '2.0.0'
+# Information added by Drupal.org packaging script on 2024-08-02
+version: '2.0.1'
 project: 'nice_filemime'
-datestamp: 1694195026
+datestamp: 1722609504

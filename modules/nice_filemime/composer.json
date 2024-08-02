@@ -1,11 +1,7 @@
 {
-    "name": "drupal/nice_filemime",
-    "description": "Nice FileMime module allows you to configure a nice, human friendly MIME type description.",
-    "type": "drupal-module",
-    "license": "GPL-2.0-or-later",
-    "homepage": "https://www.drupal.org/project/nice_filemime",
-    "support": {
-        "issues": "https://www.drupal.org/project/issues/nice_filemime",
-        "source": "https://git.drupalcode.org/project/nice_filemime"
-    }
+  "name": "drupal/nice_filemime",
+  "description": "Nice FileMime module allows you to configure a nice, human friendly MIME type description.",
+  "type": "drupal-module",
+  "license": "GPL-2.0+",
+  "homepage": "https://www.drupal.org/project/nice_filemime"
 }

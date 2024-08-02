@@ -21,9 +21,10 @@ class NiceFileMime {
    * Returns the nice version of the MIME type given the raw MIME type.
    *
    * @param string $filemime
-   *  A raw mime type string.
+   *   A raw mime type string.
+   *
    * @return string
-   *  The nice version of the MIME type, or the orginal if it's not found.
+   *   The nice version of the MIME type, or the original if it's not found.
    */
   public function getNiceFileMime($filemime) {
     // All our nice mimes.
@@ -42,7 +43,7 @@ class NiceFileMime {
    * Returns the map of configured nice MIME types.
    *
    * @return array
-   *  The map of nice file MIME types.
+   *   The map of nice file MIME types.
    */
   private function mapNiceFileMime() {
     $niceFileMimesTemp = $this->config->get('nice_filemimes');
