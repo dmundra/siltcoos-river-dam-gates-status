@@ -76,8 +76,7 @@ trait PerformanceTestTrait {
       'performanceTimeline' => 'ALL',
     ];
     // Support legacy key.
-    $chrome_options_key = isset($driver_args[1]['chromeOptions']) ? 'chromeOptions' : 'goog:chromeOptions';
-    $driver_args[1][$chrome_options_key]['perfLoggingPrefs'] = [
+    $driver_args[1]['goog:chromeOptions']['perfLoggingPrefs'] = [
       'traceCategories' => 'timeline,devtools.timeline,browser',
     ];
 
@@ -615,8 +614,12 @@ trait PerformanceTestTrait {
    *   Whether the event was triggered by the database cache implementation.
    */
   protected static function isDatabaseCache(DatabaseEvent $event): bool {
-    $class = str_replace('\\\\', '\\', $event->caller['class']);
-    return is_a($class, '\Drupal\Core\Cache\DatabaseBackend', TRUE) || is_a($class, '\Drupal\Core\Cache\DatabaseCacheTagsChecksum', TRUE);
+    // If there is no class, then this is called from a procedural function.
+    if (isset($event->caller['class'])) {
+      $class = str_replace('\\\\', '\\', $event->caller['class']);
+      return is_a($class, '\Drupal\Core\Cache\DatabaseBackend', TRUE) || is_a($class, '\Drupal\Core\Cache\DatabaseCacheTagsChecksum', TRUE);
+    }
+    return FALSE;
   }
 
 }

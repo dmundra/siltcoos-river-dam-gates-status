@@ -191,7 +191,7 @@ function hook_views_data() {
   //   ... FROM example_table et ... JOIN node_field_data nfd
   //   ON et.nid = nfd.nid AND ('extra' clauses will be here) ...
   // @endcode
-  // although the table aliases will be different.
+  // (The table aliases will be different.)
   $data['example_table']['table']['join'] = [
     // Within the 'join' section, list one or more tables to automatically
     // join to. In this example, every time 'node_field_data' is available in
@@ -245,7 +245,7 @@ function hook_views_data() {
   //   JOIN node_field_data nfd ON (definition of the join from the foo
   //   module goes here) ...
   // @endcode
-  // although the table aliases will be different.
+  // Although the table aliases will be different.
   $data['example_table']['table']['join']['node_field_data'] = [
     // 'node_field_data' above is the base we're joining to in Views.
     // 'left_table' is the table we're actually joining to, in order to get to
@@ -313,6 +313,8 @@ function hook_views_data() {
       'id' => 'standard',
       // Default label for relationship in the UI.
       'label' => t('Example node'),
+      // Description shown within the add relationship handler in the UI.
+      'help' => t('Relationship between the node and node field data'),
     ],
   ];
 
@@ -495,8 +497,8 @@ function hook_views_data_alter(array &$data) {
   // In Views data definitions, each field can have only one relationship. So
   // rather than adding this relationship directly to the $data['foo']['fid']
   // field entry, which could overwrite an existing relationship, we define
-  // a dummy field key to handle the relationship.
-  $data['foo']['unique_dummy_name'] = [
+  // a placeholder field key to handle the relationship.
+  $data['foo']['unique_placeholder_name'] = [
     'title' => t('Title seen while adding relationship'),
     'help' => t('More information about the relationship'),
 
@@ -506,11 +508,13 @@ function hook_views_data_alter(array &$data) {
       // Database field name in example_table for the join.
       'base field' => 'eid',
       // Real database field name in foo for the join, to override
-      // 'unique_dummy_name'.
+      // 'unique_placeholder_name'.
       'field' => 'fid',
       // ID of relationship handler plugin to use.
       'id' => 'standard',
       'label' => t('Default label for relationship'),
+      // Description shown within the add relationship handler in the UI.
+      'help' => t('Description of the placeholder field relationship'),
     ],
   ];
 

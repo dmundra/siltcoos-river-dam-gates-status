@@ -546,7 +546,7 @@ abstract class ContentEntityBase extends EntityBase implements \IteratorAggregat
   /**
    * {@inheritdoc}
    */
-  public function __sleep() {
+  public function __sleep(): array {
     // Get the values of instantiated field objects, only serialize the values.
     foreach ($this->fields as $name => $fields) {
       foreach ($fields as $langcode => $field) {
@@ -687,8 +687,7 @@ abstract class ContentEntityBase extends EntityBase implements \IteratorAggregat
   /**
    * {@inheritdoc}
    */
-  #[\ReturnTypeWillChange]
-  public function getIterator() {
+  public function getIterator(): \ArrayIterator {
     return new \ArrayIterator($this->getFields());
   }
 

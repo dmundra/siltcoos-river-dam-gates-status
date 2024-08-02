@@ -100,9 +100,9 @@ JS);
       $current_page_ajax_response_count = 0;
     }
 
-    // Detect unnecessary AJAX request waits and inform the test author.
+    // Detect unnecessary AJAX request waits.
     if ($drupal_ajax_request_count === $current_page_ajax_response_count) {
-      @trigger_error(sprintf('%s called unnecessarily in a test is deprecated in drupal:10.2.0 and will throw an exception in drupal:11.0.0. See https://www.drupal.org/node/3401201', __METHOD__), E_USER_DEPRECATED);
+      throw new \RuntimeException('There are no AJAX requests to wait for.');
     }
 
     // Detect untracked AJAX requests. This will alert if the detection is
@@ -724,6 +724,27 @@ JS;
     // We select based on WebAssert::buildStatusMessageSelector() or the
     // js_selector we have just built.
     return $this->buildStatusMessageSelector($message, $type) . ' | ' . $js_selector;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function statusMessageContains(string $message, ?string $type = NULL): void {
+    $selector = $this->buildStatusMessageSelector($message, $type);
+    $this->waitForElement('xpath', $selector);
+    parent::statusMessageContains($message, $type);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function statusMessageNotContains(string $message, ?string $type = NULL): void {
+    $selector = $this->buildStatusMessageSelector($message, $type);
+    // Wait for a second for the message to not exist.
+    $this->waitForHelper(1000, function (Element $page) use ($selector) {
+      return !$page->find('xpath', $selector);
+    });
+    parent::statusMessageNotContains($message, $type);
   }
 
 }

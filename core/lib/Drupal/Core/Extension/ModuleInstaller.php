@@ -89,16 +89,12 @@ class ModuleInstaller implements ModuleInstallerInterface {
    * @see \Drupal\Core\DrupalKernel
    * @see \Drupal\Core\CoreServiceProvider
    */
-  public function __construct($root, ModuleHandlerInterface $module_handler, DrupalKernelInterface $kernel, Connection $connection, UpdateHookRegistry $update_registry, protected ?LoggerInterface $logger = NULL) {
+  public function __construct($root, ModuleHandlerInterface $module_handler, DrupalKernelInterface $kernel, Connection $connection, UpdateHookRegistry $update_registry, protected LoggerInterface $logger) {
     $this->root = $root;
     $this->moduleHandler = $module_handler;
     $this->kernel = $kernel;
     $this->connection = $connection;
     $this->updateRegistry = $update_registry;
-    if ($this->logger === NULL) {
-      @trigger_error('Calling ' . __METHOD__ . ' without the $logger argument is deprecated in drupal:10.1.0 and it will be required in drupal:11.0.0. See https://www.drupal.org/node/2932520', E_USER_DEPRECATED);
-      $this->logger = \Drupal::service('logger.channel.system');
-    }
   }
 
   /**
@@ -351,6 +347,11 @@ class ModuleInstaller implements ModuleInstallerInterface {
         //   causes a circular service dependency.
         // @see https://www.drupal.org/node/2208429
         \Drupal::service('theme_handler')->refreshInfo();
+
+        // Modules may provide single directory components which are added to
+        // the core library definitions rather than the module itself, this
+        // requires the library discovery cache to be rebuilt.
+        \Drupal::service('library.discovery')->clearCachedDefinitions();
 
         // Allow the module to perform install tasks.
         $this->moduleHandler->invoke($module, 'install', [$sync_status]);

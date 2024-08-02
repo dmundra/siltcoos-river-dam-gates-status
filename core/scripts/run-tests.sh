@@ -25,7 +25,6 @@ use Drupal\Core\Test\TestRun;
 use Drupal\Core\Test\TestRunnerKernel;
 use Drupal\Core\Test\TestRunResultsStorageInterface;
 use Drupal\Core\Test\TestDiscovery;
-use Drupal\TestTools\PhpUnitCompatibility\ClassWriter;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Runner\Version;
 use Symfony\Component\Console\Output\ConsoleOutput;
@@ -511,7 +510,6 @@ function simpletest_script_init() {
   $autoloader = require_once __DIR__ . '/../../autoload.php';
   // The PHPUnit compatibility layer needs to be available to autoload tests.
   $autoloader->add('Drupal\\TestTools', __DIR__ . '/../tests');
-  ClassWriter::mutateTestBase($autoloader);
 
   // Get URL from arguments.
   if (!empty($args['url'])) {
@@ -817,13 +815,8 @@ function simpletest_script_execute_batch(TestRunResultsStorageInterface $test_ru
  * Run a PHPUnit-based test.
  */
 function simpletest_script_run_phpunit(TestRun $test_run, $class) {
-  $reflection = new \ReflectionClass($class);
-  if ($reflection->hasProperty('runLimit')) {
-    set_time_limit($reflection->getStaticPropertyValue('runLimit'));
-  }
-
   $runner = PhpUnitTestRunner::create(\Drupal::getContainer());
-  $results = $runner->execute($test_run, [$class], $status);
+  $results = $runner->execute($test_run, $class, $status);
   $runner->processPhpUnitResults($test_run, $results);
 
   $summaries = $runner->summarizeResults($results);
@@ -1030,8 +1023,8 @@ function simpletest_script_get_test_list() {
   }
 
   if ((int) $args['ci-parallel-node-total'] > 1) {
-    $slow_tests_per_job = ceil(count($slow_tests) / $args['ci-parallel-node-total']);
-    $tests_per_job = ceil(count($test_list) / $args['ci-parallel-node-total']);
+    $slow_tests_per_job = (int) ceil(count($slow_tests) / $args['ci-parallel-node-total']);
+    $tests_per_job = (int) ceil(count($test_list) / $args['ci-parallel-node-total']);
     $test_list = array_merge(array_slice($slow_tests, ($args['ci-parallel-node-index'] -1) * $slow_tests_per_job, $slow_tests_per_job), array_slice($test_list, ($args['ci-parallel-node-index'] - 1) * $tests_per_job, $tests_per_job));
   }
 

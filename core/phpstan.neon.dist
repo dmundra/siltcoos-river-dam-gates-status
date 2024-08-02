@@ -6,6 +6,8 @@ includes:
 
 parameters:
 
+  tmpDir: phpstan-tmp
+
   level: 1
 
   fileExtensions:
@@ -26,15 +28,20 @@ parameters:
     - ../*/node_modules/*
     - */tests/fixtures/*.php
     - */tests/fixtures/*.php.gz
+    # Skip the phpstan tmpDir
+    - phpstan-tmp/*
+    # Skip Drupal's own PHPStan rules test fixtures.
+    - tests/PHPStan/fixtures/*
     # Skip Drupal 6 & 7 code.
     - scripts/dump-database-d?.sh
     - scripts/generate-d?-content.sh
     # Skip data files.
     - lib/Drupal/Component/Transliteration/data/*.php
-    # Below extends on purpose a non existing class for testing.
+    # The following classes deliberately extend non-existent classes for testing.
     - modules/system/tests/modules/plugin_test/src/Plugin/plugin_test/fruit/ExtendingNonInstalledClass.php
     - modules/system/tests/modules/plugin_test/src/Plugin/plugin_test/custom_annotation/UsingNonInstalledTraitClass.php
     - modules/system/tests/modules/plugin_test/src/Plugin/plugin_test/custom_annotation/ExtendingNonInstalledClass.php
+    - tests/Drupal/Tests/Component/Plugin/Attribute/Fixtures/Plugins/PluginNamespace/AttributeDiscoveryTest2.php
 
   ignoreErrors:
     # new static() is a best practice in Drupal, so we cannot fix that.
@@ -44,3 +51,6 @@ parameters:
     - "#Drupal calls should be avoided in classes, use dependency injection instead#"
     - "#^Plugin definitions cannot be altered.#"
     - "#^Class .* extends @internal class#"
+
+rules:
+  - Drupal\PHPStan\Rules\ComponentTestDoesNotExtendCoreTest

@@ -191,6 +191,7 @@ abstract class ConfigEntityBase extends EntityBase implements ConfigEntityInterf
   /**
    * {@inheritdoc}
    */
+  #[ActionMethod(adminLabel: new TranslatableMarkup('Set status'), pluralize: FALSE)]
   public function setStatus($status) {
     $this->status = (bool) $status;
     return $this;
@@ -343,7 +344,7 @@ abstract class ConfigEntityBase extends EntityBase implements ConfigEntityInterf
   /**
    * {@inheritdoc}
    */
-  public function __sleep() {
+  public function __sleep(): array {
     $keys_to_unset = [];
     if ($this instanceof EntityWithPluginCollectionInterface) {
       // Get the plugin collections first, so that the properties are
@@ -375,7 +376,7 @@ abstract class ConfigEntityBase extends EntityBase implements ConfigEntityInterf
   public function calculateDependencies() {
     // All dependencies should be recalculated on every save apart from enforced
     // dependencies. This ensures stale dependencies are never saved.
-    $this->dependencies = array_intersect_key($this->dependencies, ['enforced' => '']);
+    $this->dependencies = array_intersect_key($this->dependencies ?? [], ['enforced' => '']);
     if ($this instanceof EntityWithPluginCollectionInterface) {
       // Configuration entities need to depend on the providers of any plugins
       // that they store the configuration for.
