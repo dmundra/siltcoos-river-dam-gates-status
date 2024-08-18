@@ -1,0 +1,4 @@
+services:
+  tragedy_commons.repository:
+    class: Drupal\tragedy_commons\TragedyCommonsRepository
+    arguments: ['@database', '@string_translation', '@messenger']

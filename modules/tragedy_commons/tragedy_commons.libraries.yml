@@ -4,3 +4,15 @@ pdgame:
     theme:
       css/pdgame.css: { }
   dependencies: {}
+commons:
+  version: VERSION
+  css:
+    theme:
+      css/commons.css: { }
+  dependencies: {}
+requests:
+  version: VERSION
+  css:
+    theme:
+      css/requests.css: { }
+  dependencies: {}

@@ -1,3 +1,12 @@
 pdgame
 dmundra
 mundra
+firstname
+lastname
+requestsform
+Mildenberger
+requestsapproveform
+requestsdisapproveform
+gamespace
+testpassword
+multiplayerform

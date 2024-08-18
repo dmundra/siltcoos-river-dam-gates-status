@@ -1,0 +1,114 @@
+<?php
+
+/**
+ * @file
+ * Contains install and update functions for Tragedy Commons games.
+ */
+
+use Drupal\Core\Database\Database;
+
+/**
+ * Implements hook_schema().
+ */
+function tragedy_commons_schema() {
+  $schema['tragedy_commons_multi'] = [
+    'description' => 'Stores tragedy commons multi player game requests.',
+    'fields' => [
+      'gid' => [
+        'description' => 'Primary Key: Unique game ID.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'firstname' => [
+        'description' => 'The first name.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ],
+      'lastname' => [
+        'description' => 'The last name.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ],
+      'email' => [
+        'description' => 'The e-mail address.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ],
+      'institution' => [
+        'description' => 'The institution.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ],
+      'description' => [
+        'description' => 'A description.',
+        'type' => 'text',
+        'not null' => FALSE,
+      ],
+      'status' => [
+        'description' => 'Status.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ],
+      'created' => [
+        'description' => 'A timestamp with millisecond precision indicating when the request entry was created.',
+        'type' => 'numeric',
+        'precision' => 14,
+        'scale' => 3,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'updated' => [
+        'description' => 'A timestamp with millisecond precision indicating when the request entry was updated.',
+        'type' => 'numeric',
+        'precision' => 14,
+        'scale' => 3,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+    ],
+    'primary key' => ['gid'],
+  ];
+  return $schema;
+}
+
+/**
+ * Adds tragedy_commons_multi database table for tracking requests.
+ */
+function tragedy_commons_update_8001(&$sandbox) {
+  $tragedy_commons_schema = tragedy_commons_schema();
+  $schema = Database::getConnection()->schema();
+  if (!$schema->tableExists('tragedy_commons_multi')) {
+    $schema->createTable('tragedy_commons_multi', $tragedy_commons_schema['tragedy_commons_multi']);
+  }
+}
+
+/**
+ * Adds created and updated date columns to table for tracking request dates.
+ */
+function tragedy_commons_update_8002(&$sandbox) {
+  $schema = Database::getConnection()->schema();
+  $created_spec = [
+    'description' => 'A timestamp with millisecond precision indicating when the request entry was created.',
+    'type' => 'numeric',
+    'precision' => 14,
+    'scale' => 3,
+    'not null' => TRUE,
+    'default' => 0,
+  ];
+  $schema->addField('tragedy_commons_multi', 'created', $created_spec);
+  $updated_spec = [
+    'description' => 'A timestamp with millisecond precision indicating when the request entry was updated.',
+    'type' => 'numeric',
+    'precision' => 14,
+    'scale' => 3,
+    'not null' => TRUE,
+    'default' => 0,
+  ];
+  $schema->addField('tragedy_commons_multi', 'updated', $updated_spec);
+}

@@ -45,7 +45,7 @@ class PDGame1Form extends FormBase {
     ];
 
     $form['submit'] = [
-      '#type' => 'submit',
+      '#type' => 'button',
       '#value' => 'Submit',
       '#button_type' => 'primary',
       '#ajax' => [
