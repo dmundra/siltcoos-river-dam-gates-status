@@ -74,6 +74,124 @@ function tragedy_commons_schema() {
     ],
     'primary key' => ['gid'],
   ];
+  $schema['tragedy_commons_multi_player'] = [
+    'description' => 'Stores tragedy commons multi player game player details.',
+    'fields' => [
+      'pid' => [
+        'description' => 'Primary Key: Unique player ID.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'gid' => [
+        'description' => 'The {tragedy_commons_multi}.gid this player is playing on.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'firstname' => [
+        'description' => 'The first name.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ],
+      'lastname' => [
+        'description' => 'The last name.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ],
+      'started' => [
+        'description' => 'A timestamp with millisecond precision indicating when the player entry was created.',
+        'type' => 'numeric',
+        'precision' => 14,
+        'scale' => 3,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'test' => [
+        'description' => 'Boolean indicating whether this player is testing.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 1,
+        'size' => 'tiny',
+      ],
+    ],
+    'primary key' => ['pid', 'gid'],
+    'foreign keys' => [
+      'tragedy_commons_multi' => [
+        'table' => 'tragedy_commons_multi',
+        'columns' => [
+          'gid' => 'gid',
+        ],
+      ],
+    ],
+  ];
+  $schema['tragedy_commons_multi_round'] = [
+    'description' => 'Stores tragedy commons multi player game round details.',
+    'fields' => [
+      'rid' => [
+        'description' => 'Primary Key: Unique round ID.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'gid' => [
+        'description' => 'The {tragedy_commons_multi}.gid this player is playing on.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'pid' => [
+        'description' => 'The {tragedy_commons_multi_player}.pid this round is playing on.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'cows' => [
+        'description' => 'The number of cows.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'started' => [
+        'description' => 'A timestamp with millisecond precision indicating when the player entry was created.',
+        'type' => 'numeric',
+        'precision' => 14,
+        'scale' => 3,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'test' => [
+        'description' => 'Boolean indicating whether this player is testing.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 1,
+        'size' => 'tiny',
+      ],
+    ],
+    'primary key' => ['rid', 'gid', 'pid'],
+    'foreign keys' => [
+      'tragedy_commons_multi' => [
+        'table' => 'tragedy_commons_multi',
+        'columns' => [
+          'gid' => 'gid',
+        ],
+      ],
+      'tragedy_commons_multi_player' => [
+        'table' => 'tragedy_commons_multi_player',
+        'columns' => [
+          'pid' => 'pid',
+        ],
+      ],
+    ],
+  ];
   return $schema;
 }
 
@@ -93,22 +211,48 @@ function tragedy_commons_update_8001(&$sandbox) {
  */
 function tragedy_commons_update_8002(&$sandbox) {
   $schema = Database::getConnection()->schema();
-  $created_spec = [
-    'description' => 'A timestamp with millisecond precision indicating when the request entry was created.',
-    'type' => 'numeric',
-    'precision' => 14,
-    'scale' => 3,
-    'not null' => TRUE,
-    'default' => 0,
-  ];
-  $schema->addField('tragedy_commons_multi', 'created', $created_spec);
-  $updated_spec = [
-    'description' => 'A timestamp with millisecond precision indicating when the request entry was updated.',
-    'type' => 'numeric',
-    'precision' => 14,
-    'scale' => 3,
-    'not null' => TRUE,
-    'default' => 0,
-  ];
-  $schema->addField('tragedy_commons_multi', 'updated', $updated_spec);
+  if (!$schema->fieldExists('tragedy_commons_multi', 'created')) {
+    $created_spec = [
+      'description' => 'A timestamp with millisecond precision indicating when the request entry was created.',
+      'type' => 'numeric',
+      'precision' => 14,
+      'scale' => 3,
+      'not null' => TRUE,
+      'default' => 0,
+    ];
+    $schema->addField('tragedy_commons_multi', 'created', $created_spec);
+  }
+  if (!$schema->fieldExists('tragedy_commons_multi', 'updated')) {
+    $updated_spec = [
+      'description' => 'A timestamp with millisecond precision indicating when the request entry was updated.',
+      'type' => 'numeric',
+      'precision' => 14,
+      'scale' => 3,
+      'not null' => TRUE,
+      'default' => 0,
+    ];
+    $schema->addField('tragedy_commons_multi', 'updated', $updated_spec);
+  }
+}
+
+/**
+ * Adds tragedy_commons_multi_player database table for tracking players.
+ */
+function tragedy_commons_update_8003(&$sandbox) {
+  $tragedy_commons_schema = tragedy_commons_schema();
+  $schema = Database::getConnection()->schema();
+  if (!$schema->tableExists('tragedy_commons_multi_player')) {
+    $schema->createTable('tragedy_commons_multi_player', $tragedy_commons_schema['tragedy_commons_multi_player']);
+  }
+}
+
+/**
+ * Adds tragedy_commons_multi_round database table for tracking rounds.
+ */
+function tragedy_commons_update_8004(&$sandbox) {
+  $tragedy_commons_schema = tragedy_commons_schema();
+  $schema = Database::getConnection()->schema();
+  if (!$schema->tableExists('tragedy_commons_multi_round')) {
+    $schema->createTable('tragedy_commons_multi_round', $tragedy_commons_schema['tragedy_commons_multi_round']);
+  }
 }

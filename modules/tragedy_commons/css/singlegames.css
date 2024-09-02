@@ -1,0 +1,18 @@
+#tragedy-commons-singlegame1form {
+  padding-top: 48px;
+  background-image: url("../images/cow.gif");
+  background-repeat: no-repeat;
+  background-position: top;
+}
+#tragedy-commons-singlegame2form {
+  padding-top: 48px;
+  background-image: url("../images/whale.gif");
+  background-repeat: no-repeat;
+  background-position: top;
+}
+table {
+  width: 100%;
+  margin: 1em 0;
+  text-align: center;
+  border-collapse: collapse;
+}

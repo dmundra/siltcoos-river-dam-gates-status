@@ -5,7 +5,7 @@ configure: tragedy_commons.config_form
 core_version_requirement: ^10 || ^11
 package: Development
 
-# Information added by Drupal.org packaging script on 2024-08-18
-version: '1.0.2-alpha1'
+# Information added by Drupal.org packaging script on 2024-09-02
+version: '1.0.3-alpha1'
 project: 'tragedy_commons'
-datestamp: 1724004368
+datestamp: 1725302259

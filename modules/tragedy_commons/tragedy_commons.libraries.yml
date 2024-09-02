@@ -16,3 +16,15 @@ requests:
     theme:
       css/requests.css: { }
   dependencies: {}
+games:
+  version: VERSION
+  css:
+    theme:
+      css/games.css: { }
+  dependencies: {}
+singlegames:
+  version: VERSION
+  css:
+    theme:
+      css/singlegames.css: { }
+  dependencies: {}

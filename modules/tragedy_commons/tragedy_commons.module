@@ -13,7 +13,7 @@ use Drupal\markdown\Markdown;
 const TRAGEDY_COMMONS_REQUEST = 'Request';
 const TRAGEDY_COMMONS_ACCEPTED = 'Accepted';
 const TRAGEDY_COMMONS_REJECTED = 'Rejected';
-const TRAGEDY_COMMONS_REVIEWER = 'rmitchel@uoregon.edu,danielmundra@gmail.com';
+const TRAGEDY_COMMONS_REVIEWER = 'rmitchel@uoregon.edu,dmundra@me.com';
 
 /**
  * Implements hook_help().
@@ -118,50 +118,30 @@ Web: https://ronaldbmitchell.com/', $email_string_params, $options);
         '@hbase' => $module_base_url->toString(),
         '@testpassword' => $password . '-test',
         '@password' => $password,
+        '@id' => $params['gid'],
       ];
       $message['subject'] = t('Tragedy of the Commons Game Request Approved', [], $options);
       $body = t('@firstname @lastname,
 
-Your request to use the multi-person version of the Tragedy of the
-Commons game has been approved.  Before scheduling the game, please
-learn more about the game and ideas for teaching it at:
-https://ronaldbmitchell.com/commons/instructions/ which has links
-for the instructions, an example from the multi-person game, my lecture
-notes and video of my teaching of the course.
+Your request to use the multi-person version of the Tragedy of the Commons game has been approved. Before scheduling the game, please learn more about the game and ideas for teaching it at: https://ronaldbmitchell.com/commons/ which has links for the instructions, an example from the multi-person game, my lecture notes and video of my teaching of the course.
 
-I have set up two passwords so your class can play.  It is EXTREMELY
-important that you read and follow the instructions on the webpage above
-very carefully.
+I have set up two passwords so your class can play. It is EXTREMELY important that you read and follow the instructions on the webpage above very carefully.
 
-Most importantly, please do a practice run first by getting two or three
-research assistants or colleagues together.  Each of those who will be
-playing the game to test it should go to:
+Most importantly, please do a practice run first by getting two or three research assistants or colleagues together. Each of those who will be playing the game to TEST IT should go to:
     @hbase/
-and entering the TEST password in the box in the "Enter Password" box.
-Your test password is:
+and entering the TEST password in the box in the "Enter Password" box. Your test password is:
    @testpassword
 You will MANAGE the playing of the TEST game at the following page:
-   @hbase/gamespace/@testpassword/manage
+   @hbase/gamespace/@id/manage?test=1
 
-If that works successfully, then you can play the game with your class by
-having all your students go to the same page (@hbase/) and have each
-enter the CLASS password in the "Enter Password" box.  Your class
-password is:
+If that works successfully, then you can play the game with your class by having all your students go to the same page (@hbase/) and have each enter the CLASS password in the "Enter Password" box.  Your class password is:
    @password
 You will MANAGE the playing of the CLASS game at the following page:
-   @hbase/gamespace/@password/manage
+   @hbase/gamespace/@id/manage
 
-The practice will make sure you understand the mechanics of how the game
-works and thereby avoid the embarrassment of it not working properly with
-the class.  It usually works smoothly but it is important that you test
-it.  You can play it anytime - I don\'t need to know when.
+The practice will make sure you understand the mechanics of how the game works and thereby avoid the embarrassment of it not working properly with the class. It usually works smoothly but it is important that you test it. You can play it anytime - I don\'t need to know when.
 
-Please let me know if the test runs smoothly.  If so, then you can
-schedule the game with your class anytime.  The only request I make in
-exchange for making this game available is that you send me an email
-after you conclude to let me know how it was received by the students.  I
-have put considerable effort into setting up this game and would like to
-know how it is used.
+Please let me know if the test runs smoothly. If so, then you can schedule the game with your class anytime. The only request I make in exchange for making this game available is that you send me an email after you conclude to let me know how it was received by the students. I have put considerable effort into setting up this game and would like to know how it is used.
 
 Best of luck with the game,
 Ron

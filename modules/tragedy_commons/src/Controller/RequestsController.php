@@ -91,12 +91,23 @@ class RequestsController extends ControllerBase {
         $items[] = $this->formBuilder->getForm('Drupal\tragedy_commons\Form\RequestsApproveForm', $entry);
         $items[] = $this->formBuilder->getForm('Drupal\tragedy_commons\Form\RequestsDisapproveForm', $entry);
       }
+      else {
+        $items[] = new Link('Game start page', new Url('tragedy_commons.gamespace', ['gid' => $entry->gid]));
+      }
     }
 
-    $content['result'] = [
-      '#theme' => 'item_list',
-      '#items' => $items,
-    ];
+    if (!empty($items)) {
+      $content['result'] = [
+        '#theme' => 'item_list',
+        '#items' => $items,
+      ];
+    }
+    else {
+      $content['notfound'] = [
+        '#type' => 'markup',
+        '#markup' => $this->t('<em>Request not found</em>.'),
+      ];
+    }
 
     // Don't cache this page.
     $content['#cache']['max-age'] = 0;

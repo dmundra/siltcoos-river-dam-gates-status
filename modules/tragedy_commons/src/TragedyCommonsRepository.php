@@ -40,7 +40,7 @@ class TragedyCommonsRepository {
   }
 
   /**
-   * Save an entry in the database.
+   * Save a request entry in the database.
    *
    * Exception handling is shown in this example. It could be simplified
    * without the try/catch blocks, but since an insert will throw an exception
@@ -143,6 +143,142 @@ class TragedyCommonsRepository {
 
     // Order by created desc.
     $select->orderBy('created', 'DESC');
+
+    // Return the result in object format.
+    return $select->execute()->fetchAll();
+  }
+
+  /**
+   * Save a player entry in the database.
+   *
+   * Exception handling is shown in this example. It could be simplified
+   * without the try/catch blocks, but since an insert will throw an exception
+   * and terminate your application if the exception is not handled, it is best
+   * to employ try/catch.
+   *
+   * @param array $player
+   *   An array containing all the fields of the database record.
+   *
+   * @return int
+   *   The number of updated rows.
+   *
+   * @throws \Exception
+   *   When the database insert fails.
+   */
+  public function insertPlayer(array $player) {
+    try {
+      $return_value = $this->connection->insert('tragedy_commons_multi_player')
+        ->fields($player)
+        ->execute();
+    }
+    catch (\Exception $e) {
+      $this->messenger()->addMessage($this->t('Insert failed. Message = %message', [
+        '%message' => $e->getMessage(),
+      ]), 'error');
+    }
+    return $return_value ?? NULL;
+  }
+
+  /**
+   * Read from the database using a filter array.
+   *
+   * The standard function to perform reads for static queries is
+   * Connection::query().
+   *
+   * Connection::query() uses an SQL query with placeholders and arguments as
+   * parameters.
+   *
+   * @param array $entry
+   *   An array containing all the fields used to search the entries in the
+   *   table.
+   *
+   * @return array
+   *   An object containing the loaded entries if found.
+   *
+   * @see Drupal\Core\Database\Connection::select()
+   */
+  public function loadPlayer(array $entry = []) {
+    // Read all the fields from the tragedy_commons_multi table.
+    $select = $this->connection
+      ->select('tragedy_commons_multi_player')
+      // Add all the fields into our select query.
+      ->fields('tragedy_commons_multi_player');
+
+    // Add each field and value as a condition to this query.
+    foreach ($entry as $field => $value) {
+      $select->condition($field, $value);
+    }
+
+    // Order by created desc.
+    $select->orderBy('started', 'DESC');
+
+    // Return the result in object format.
+    return $select->execute()->fetchAll();
+  }
+
+  /**
+   * Save a round entry in the database.
+   *
+   * Exception handling is shown in this example. It could be simplified
+   * without the try/catch blocks, but since an insert will throw an exception
+   * and terminate your application if the exception is not handled, it is best
+   * to employ try/catch.
+   *
+   * @param array $round
+   *   An array containing all the fields of the database record.
+   *
+   * @return int
+   *   The number of updated rows.
+   *
+   * @throws \Exception
+   *   When the database insert fails.
+   */
+  public function insertRound(array $round) {
+    try {
+      $return_value = $this->connection->insert('tragedy_commons_multi_round')
+        ->fields($round)
+        ->execute();
+    }
+    catch (\Exception $e) {
+      $this->messenger()->addMessage($this->t('Insert failed. Message = %message', [
+        '%message' => $e->getMessage(),
+      ]), 'error');
+    }
+    return $return_value ?? NULL;
+  }
+
+  /**
+   * Read from the database using a filter array.
+   *
+   * The standard function to perform reads for static queries is
+   * Connection::query().
+   *
+   * Connection::query() uses an SQL query with placeholders and arguments as
+   * parameters.
+   *
+   * @param array $entry
+   *   An array containing all the fields used to search the entries in the
+   *   table.
+   *
+   * @return array
+   *   An object containing the loaded entries if found.
+   *
+   * @see Drupal\Core\Database\Connection::select()
+   */
+  public function loadRound(array $entry = []) {
+    // Read all the fields from the tragedy_commons_multi table.
+    $select = $this->connection
+      ->select('tragedy_commons_multi_round')
+      // Add all the fields into our select query.
+      ->fields('tragedy_commons_multi_round');
+
+    // Add each field and value as a condition to this query.
+    foreach ($entry as $field => $value) {
+      $select->condition($field, $value);
+    }
+
+    // Order by created desc.
+    $select->orderBy('started', 'DESC');
 
     // Return the result in object format.
     return $select->execute()->fetchAll();

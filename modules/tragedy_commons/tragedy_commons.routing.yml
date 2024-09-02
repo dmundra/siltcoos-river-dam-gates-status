@@ -6,11 +6,51 @@ tragedy_commons.base:
   requirements:
     _permission: 'view tragedy of the commons'
 
+tragedy_commons.singlegame1:
+  path: '/tragedy_of_the_commons/1cow'
+  defaults:
+    _controller: '\Drupal\tragedy_commons\Controller\SingleGameController::cow'
+    _title: 'Learning to Make Optimal Use of A Private Farm'
+  requirements:
+    _permission: 'view tragedy of the commons'
+
+tragedy_commons.singlegame2:
+  path: '/tragedy_of_the_commons/1whale'
+  defaults:
+    _controller: '\Drupal\tragedy_commons\Controller\SingleGameController::whale'
+    _title: 'Tragedy of Indigenous Whaling Game'
+  requirements:
+    _permission: 'view tragedy of the commons'
+
 tragedy_commons.gamespace:
   path: '/tragedy_of_the_commons/gamespace/{gid}'
   defaults:
     _controller: '\Drupal\tragedy_commons\Controller\GameController::start'
-    _title: 'Tragedy of the Commons Start Page'
+    _title_callback: '\Drupal\tragedy_commons\Controller\GameController::gameTitle'
+  requirements:
+    _permission: 'view tragedy of the commons'
+
+tragedy_commons.gamespace_player:
+  path: '/tragedy_of_the_commons/gamespace/{gid}/{pid}'
+  defaults:
+    _controller: '\Drupal\tragedy_commons\Controller\GameController::play'
+    _title_callback: '\Drupal\tragedy_commons\Controller\GameController::playTitle'
+  requirements:
+    _permission: 'view tragedy of the commons'
+
+tragedy_commons.gamespace_wait:
+  path: '/tragedy_of_the_commons/gamespace/{gid}/{pid}/{rid}'
+  defaults:
+    _controller: '\Drupal\tragedy_commons\Controller\GameController::wait'
+    _title: 'Please Wait Here'
+  requirements:
+    _permission: 'view tragedy of the commons'
+
+tragedy_commons.gamespace_manage:
+  path: '/tragedy_of_the_commons/gamespace/{gid}/manage'
+  defaults:
+    _controller: '\Drupal\tragedy_commons\Controller\GameController::manage'
+    _title: 'Tragedy of the Commons Management Page'
   requirements:
     _permission: 'view tragedy of the commons'
 

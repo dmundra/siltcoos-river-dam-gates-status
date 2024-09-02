@@ -2,6 +2,7 @@
 
 namespace Drupal\nice_filemime\Plugin\facets\processor;
 
+use Drupal\Core\Cache\UnchangingCacheableDependencyTrait;
 use Drupal\facets\FacetInterface;
 use Drupal\facets\Processor\BuildProcessorInterface;
 use Drupal\facets\Processor\ProcessorPluginBase;
@@ -19,6 +20,7 @@ use Drupal\facets\Processor\ProcessorPluginBase;
  * )
  */
 class NiceFileMimeProcessor extends ProcessorPluginBase implements BuildProcessorInterface {
+  use UnchangingCacheableDependencyTrait;
 
   /**
    * {@inheritdoc}

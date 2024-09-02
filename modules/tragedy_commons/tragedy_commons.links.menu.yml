@@ -18,13 +18,14 @@ tragedy_commons.pdgame2:
   parent: tragedy_commons.base
   weight: 20
 
-#entity.tragedy_commons.collection:
-#  title: 'Tragedy of the Commons Submissions Results'
-#  route_name: entity.batch_op_log.collection
-#  description: 'View the results of all submissions.'
-#  parent: tragedy_commons.base
-#  weight: 5
-#
+# Results page.
+tragedy_commons.results:
+  title: 'Tragedy of the Commons Game Requests'
+  route_name: tragedy_commons.results
+  description: 'Table of requests.'
+  parent: system.admin_config_development
+  weight: 5
+
 #tragedy_commons.config_form:
 #  title: 'Tragedy of the Commons Settings'
 #  route_name: tragedy_commons.config_form
