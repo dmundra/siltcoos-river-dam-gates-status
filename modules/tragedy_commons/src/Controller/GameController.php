@@ -574,8 +574,8 @@ return to this page to process the next round of results.</em>'),
               $rows[] = [
                 $player_name,
                 $round->cows,
-                $round->cows * ($average_revenue - $cost),
-                $average_revenue - 100,
+                round($round->cows * ($average_revenue - $cost), 2),
+                round($average_revenue - 100, 2),
               ];
             }
 
@@ -614,13 +614,13 @@ return to this page to process the next round of results.</em>'),
             ];
             $summary_rows[] = [
               $this->t('Total milk:'),
-              '$' . $total_profit,
-              '$' . $complete_profit,
+              '$' . round($total_profit, 2),
+              '$' . round($complete_profit, 2),
             ];
             $summary_rows[] = [
               $this->t('Milk/rancher:'),
-              '$' . $total_average_profit,
-              '$' . $optimal_profit_per_farmer,
+              '$' . round($total_average_profit, 2),
+              '$' . round($optimal_profit_per_farmer, 2),
             ];
 
             $content['round_' . $round_number . '_summary_table'] = [
@@ -651,7 +651,7 @@ return to this page to process the next round of results.</em>'),
                 $partlines = 0;
               }
               $blanklines = $farmers - ($fulllines + $partlines);
-              $commons .= str_repeat('<IMG CLASS="cows" SRC="' . $images . '/10' . $color . '.gif" HEIGHT=14 WIDTH=210><IMG CLASS="cows" SRC="$images/10' . $color . '.gif" HEIGHT=14 WIDTH=210><BR>', $fulllines);
+              $commons .= str_repeat('<IMG CLASS="cows" SRC="' . $images . '/10' . $color . '.gif" HEIGHT=14 WIDTH=210><IMG CLASS="cows" SRC="' . $images . '/10' . $color . '.gif" HEIGHT=14 WIDTH=210><BR>', $fulllines);
               $commons .= str_repeat('<IMG CLASS="cows" SRC="' . $images . '/1' . $color . '.gif" HEIGHT=14 WIDTH=21>', $ones);
               $commons .= str_repeat('<IMG CLASS="cows" SRC="' . $images . '/blank' . $color . '.gif" HEIGHT=14 WIDTH=21>', $blanks);
               $commons .= '<BR>';

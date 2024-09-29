@@ -1,16 +1,17 @@
 .cows {
   display: inline;
+  height: 14px;
 }
 .cows-row {
-  display: flex;
-  flex-wrap: wrap;
+  display: block;
 }
 .cows-row > .cows-column {
-  width: 100%;
   padding: 1rem;
 }
 @media (min-width: 768px) {
-  .cows-row > .cows-column {
-    width: calc(100% / 3);
+  .cows-row {
+    display: grid;
+    grid-auto-rows: 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
   }
 }
