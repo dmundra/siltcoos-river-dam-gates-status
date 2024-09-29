@@ -110,6 +110,8 @@ class NumberOfCowsForm extends FormBase implements FormInterface, ContainerInjec
       'cows' => $form_state->getValue('cows'),
       'started' => $this->timeService->getRequestTime(),
       'test' => $test,
+      'completed' => 0,
+      'updated' => $this->timeService->getRequestTime(),
     ];
     $return = $this->repository->insertRound($round);
     if ($return) {

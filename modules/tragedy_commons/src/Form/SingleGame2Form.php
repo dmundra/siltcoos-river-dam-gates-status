@@ -3,6 +3,7 @@
 namespace Drupal\tragedy_commons\Form;
 
 use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Form\FormBase;
@@ -195,6 +196,8 @@ class SingleGame2Form extends FormBase implements FormInterface, ContainerInject
     if ($new_game) {
       $output = 'Game restarted.';
       $session->set('boats', []);
+      $response->addCommand(new InvokeCommand('#edit-boats', 'val', [0]));
+      $response->addCommand(new InvokeCommand('#edit-new-game', 'prop', ['checked', FALSE]));
     }
 
     $response->addCommand(new ReplaceCommand('#edit-result', '<div id="edit-result">' . $output . '</div>'));

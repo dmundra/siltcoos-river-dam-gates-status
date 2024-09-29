@@ -3,7 +3,9 @@
 Provides games that illustrate the tragedy of the commons, made famous by
 [Garrett Hardin in 1968 in Science magazine](https://www.jstor.org/stable/1724745).
 
-Game code created originally by [Ronald B. Mitchell](https://ronaldbmitchell.com/)
+Game code created originally by [Ronald B. Mitchell](https://ronaldbmitchell.com/).
+
+Drupal core created by [Daniel Mundra](https://www.drupal.org/u/dmundra).
 
 ## Table of contents
 

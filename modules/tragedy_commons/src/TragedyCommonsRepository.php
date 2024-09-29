@@ -256,7 +256,7 @@ class TragedyCommonsRepository {
    * Connection::query() uses an SQL query with placeholders and arguments as
    * parameters.
    *
-   * @param array $entry
+   * @param array $round
    *   An array containing all the fields used to search the entries in the
    *   table.
    *
@@ -265,7 +265,7 @@ class TragedyCommonsRepository {
    *
    * @see Drupal\Core\Database\Connection::select()
    */
-  public function loadRound(array $entry = []) {
+  public function loadRound(array $round = []) {
     // Read all the fields from the tragedy_commons_multi table.
     $select = $this->connection
       ->select('tragedy_commons_multi_round')
@@ -273,7 +273,7 @@ class TragedyCommonsRepository {
       ->fields('tragedy_commons_multi_round');
 
     // Add each field and value as a condition to this query.
-    foreach ($entry as $field => $value) {
+    foreach ($round as $field => $value) {
       $select->condition($field, $value);
     }
 
@@ -282,6 +282,33 @@ class TragedyCommonsRepository {
 
     // Return the result in object format.
     return $select->execute()->fetchAll();
+  }
+
+  /**
+   * Update a round entry in the database.
+   *
+   * @param array $game
+   *   An array containing all the fields of the item to be updated.
+   *
+   * @return int
+   *   The number of updated rows.
+   */
+  public function updateRoundsInGame(array $game) {
+    try {
+      // Connection->update()...->execute() returns the number of rows updated.
+      $count = $this->connection->update('tragedy_commons_multi_round')
+        ->fields($game)
+        ->condition('gid', $game['gid'])
+        ->condition('completed', 0)
+        ->execute();
+    }
+    catch (\Exception $e) {
+      $this->messenger()->addMessage($this->t('Update failed. Message = %message, query= %query', [
+        '%message' => $e->getMessage(),
+        '%query' => $e->query_string,
+      ]), 'error');
+    }
+    return $count ?? 0;
   }
 
 }

@@ -115,7 +115,7 @@ function tragedy_commons_schema() {
         'type' => 'int',
         'unsigned' => TRUE,
         'not null' => TRUE,
-        'default' => 1,
+        'default' => 0,
         'size' => 'tiny',
       ],
     ],
@@ -172,8 +172,39 @@ function tragedy_commons_schema() {
         'type' => 'int',
         'unsigned' => TRUE,
         'not null' => TRUE,
-        'default' => 1,
+        'default' => 0,
         'size' => 'tiny',
+      ],
+      'completed' => [
+        'description' => 'Boolean indicating whether this round is completed.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+        'size' => 'tiny',
+      ],
+      'updated' => [
+        'description' => 'A timestamp with millisecond precision indicating when the request entry was updated.',
+        'type' => 'numeric',
+        'precision' => 14,
+        'scale' => 3,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'show_names' => [
+        'description' => 'Boolean indicating whether to show names.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+        'size' => 'tiny',
+      ],
+      'round_number' => [
+        'description' => 'The number of the round.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
       ],
     ],
     'primary key' => ['rid', 'gid', 'pid'],
@@ -224,7 +255,7 @@ function tragedy_commons_update_8002(&$sandbox) {
   }
   if (!$schema->fieldExists('tragedy_commons_multi', 'updated')) {
     $updated_spec = [
-      'description' => 'A timestamp with millisecond precision indicating when the request entry was updated.',
+      'description' => 'A timestamp with millisecond precision indicating when the round was updated.',
       'type' => 'numeric',
       'precision' => 14,
       'scale' => 3,
@@ -254,5 +285,62 @@ function tragedy_commons_update_8004(&$sandbox) {
   $schema = Database::getConnection()->schema();
   if (!$schema->tableExists('tragedy_commons_multi_round')) {
     $schema->createTable('tragedy_commons_multi_round', $tragedy_commons_schema['tragedy_commons_multi_round']);
+  }
+}
+
+/**
+ * Add completed and updated date columns to table for tracking rounds.
+ */
+function tragedy_commons_update_8005(&$sandbox) {
+  $schema = Database::getConnection()->schema();
+  if (!$schema->fieldExists('tragedy_commons_multi_round', 'completed')) {
+    $completed_spec = [
+      'description' => 'Boolean indicating whether this round is completed.',
+      'type' => 'int',
+      'unsigned' => TRUE,
+      'not null' => TRUE,
+      'default' => 0,
+      'size' => 'tiny',
+    ];
+    $schema->addField('tragedy_commons_multi_round', 'completed', $completed_spec);
+  }
+  if (!$schema->fieldExists('tragedy_commons_multi_round', 'updated')) {
+    $updated_spec = [
+      'description' => 'A timestamp with millisecond precision indicating when the round was updated.',
+      'type' => 'numeric',
+      'precision' => 14,
+      'scale' => 3,
+      'not null' => TRUE,
+      'default' => 0,
+    ];
+    $schema->addField('tragedy_commons_multi_round', 'updated', $updated_spec);
+  }
+}
+
+/**
+ * Add show names and round number columns to table for tracking rounds.
+ */
+function tragedy_commons_update_8006(&$sandbox) {
+  $schema = Database::getConnection()->schema();
+  if (!$schema->fieldExists('tragedy_commons_multi_round', 'show_names')) {
+    $show_names_spec = [
+      'description' => 'Boolean indicating whether to show names.',
+      'type' => 'int',
+      'unsigned' => TRUE,
+      'not null' => TRUE,
+      'default' => 0,
+      'size' => 'tiny',
+    ];
+    $schema->addField('tragedy_commons_multi_round', 'show_names', $show_names_spec);
+  }
+  if (!$schema->fieldExists('tragedy_commons_multi_round', 'round_number')) {
+    $round_number_spec = [
+      'description' => 'The number of the round.',
+      'type' => 'int',
+      'unsigned' => TRUE,
+      'not null' => TRUE,
+      'default' => 0,
+    ];
+    $schema->addField('tragedy_commons_multi_round', 'round_number', $round_number_spec);
   }
 }

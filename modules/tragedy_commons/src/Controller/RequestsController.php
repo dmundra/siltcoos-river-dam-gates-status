@@ -91,7 +91,8 @@ class RequestsController extends ControllerBase {
         $items[] = $this->formBuilder->getForm('Drupal\tragedy_commons\Form\RequestsApproveForm', $entry);
         $items[] = $this->formBuilder->getForm('Drupal\tragedy_commons\Form\RequestsDisapproveForm', $entry);
       }
-      else {
+
+      if ($entry->status == TRAGEDY_COMMONS_ACCEPTED) {
         $items[] = new Link('Game start page', new Url('tragedy_commons.gamespace', ['gid' => $entry->gid]));
       }
     }

@@ -46,11 +46,26 @@ tragedy_commons.gamespace_wait:
   requirements:
     _permission: 'view tragedy of the commons'
 
+tragedy_commons.gamespace_round_json:
+  path: '/tragedy_of_the_commons/gamespace/{gid}/{pid}/{rid}/json'
+  defaults:
+    _controller: '\Drupal\tragedy_commons\Controller\GameController::roundJSON'
+  requirements:
+    _permission: 'view tragedy of the commons'
+
 tragedy_commons.gamespace_manage:
   path: '/tragedy_of_the_commons/gamespace/{gid}/manage'
   defaults:
     _controller: '\Drupal\tragedy_commons\Controller\GameController::manage'
     _title: 'Tragedy of the Commons Management Page'
+  requirements:
+    _permission: 'view tragedy of the commons'
+
+tragedy_commons.gamespace_results:
+  path: '/tragedy_of_the_commons/gamespace/{gid}/results'
+  defaults:
+    _controller: '\Drupal\tragedy_commons\Controller\GameController::results'
+    _title: 'Tragedy of the Commons Game Results'
   requirements:
     _permission: 'view tragedy of the commons'
 

@@ -62,8 +62,7 @@ Purpose: @description
 
 You will receive a response within a week approving or denying this request and providing you with a password to play the game, if approved.
 
-If you have not heard from me within a week, please contact me via email
-at: rmitchel@uoregon.edu.
+If you have not heard from me within a week, please contact me via email at: rmitchel@uoregon.edu.
 
 Thank you for your interest in the Tragedy of the Commons Game.
 
@@ -162,6 +161,29 @@ Web: https://ronaldbmitchell.com/', $email_string_params, $options);
       ];
       $message['subject'] = t('Tragedy of the Commons Game Request Denied', [], $options);
       $body = t('@reason
+
+Ronald Mitchell
+Department of Political Science
+University of Oregon
+Eugene, OR 97503-1284
+Tel: 541-346-4880
+Email: rmitchel@uoregon.edu
+Web: https://ronaldbmitchell.com/', $email_string_params, $options);
+      $message['body'][] = Html::escape($body);
+      break;
+
+    case 'game_played':
+      $email_string_params = [
+        '@results_page' => $params['results_page'],
+      ];
+      $message['subject'] = t('Tragedy of the Commons Game just played', [], $options);
+      $body = t('Thanks for playing the Tragedy of the Commons Game. The results of your game will be stored permanently at the following web address in case you would like to use them in your teaching: @results_page
+
+The individual game pages that were used in playing the game as well as the management page that you used will be deleted in the next few days, but the pages above should be adequate for you to use in debriefing the game.
+
+I would appreciate you letting me know how the game went, how students responded to the game, and any improvements you can think of for its use in the future.
+
+Sincerely,
 
 Ronald Mitchell
 Department of Political Science

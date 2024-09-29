@@ -1,0 +1,16 @@
+.cows {
+  display: inline;
+}
+.cows-row {
+  display: flex;
+  flex-wrap: wrap;
+}
+.cows-row > .cows-column {
+  width: 100%;
+  padding: 1rem;
+}
+@media (min-width: 768px) {
+  .cows-row > .cows-column {
+    width: calc(100% / 3);
+  }
+}
