@@ -1,17 +1,31 @@
 .cows {
-  display: inline;
+  float: left;
   height: 14px;
+}
+.cows-summary > * {
+  margin: 0 auto;
+}
+.cows-summary h3,
+.cows-summary p {
+  text-align: center;
+}
+.cows-summary table {
+  margin-block-end: 0;
 }
 .cows-row {
   display: block;
 }
 .cows-row > .cows-column {
-  padding: 1rem;
+  margin: 0 auto;
 }
 @media (min-width: 768px) {
   .cows-row {
-    display: grid;
-    grid-auto-rows: 1fr;
-    grid-template-columns: 1fr 1fr 1fr;
+    display: flex;
+  }
+  .cows-column.left {
+    width: 220px;
+  }
+  .cows-column.right {
+    width: 420px;
   }
 }

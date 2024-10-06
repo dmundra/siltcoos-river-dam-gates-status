@@ -509,8 +509,13 @@ return to this page to process the next round of results.</em>'),
       foreach ($entries as $entry) {
         $images = $base_url . '/' . $this->extensionListModule->getPath('tragedy_commons') . '/images';
         $content['intro'] = [
+          '#type' => 'details',
+          '#title' => $this->t('Interpreting the commons picture:'),
+        ];
+
+        $content['intro']['text'] = [
           '#type' => 'markup',
-          '#markup' => $this->t('<h2>Interpreting the commons picture:</h2><p>The green area is the size of the commons. When just filled with cows, the collectively optimal number of cows is on the commons. Green area without cows indicates that grazing MORE cows would increase community milk production. Grey cows indicate that too many cows are being grazed and grazing FEWER cows would increase community milk production.</p><p>* = optimal would max total milk production</p>'),
+          '#markup' => $this->t('<p>The green area is the size of the commons. When just filled with cows, the collectively optimal number of cows is on the commons. Green area without cows indicates that grazing MORE cows would increase community milk production. Grey cows indicate that too many cows are being grazed and grazing FEWER cows would increase community milk production.</p><p>* = optimal would max total milk production</p>'),
         ];
 
         $content['intro']['#attached']['library'][] = 'tragedy_commons/results';
@@ -547,15 +552,6 @@ return to this page to process the next round of results.</em>'),
           $query->fields('r');
           $rounds = $query->execute()->fetchAll();
           if (!empty($rounds)) {
-            $content['round_' . $round_number . '_details'] = [
-              '#type' => 'markup',
-              '#markup' => $this->t('<h3>Details of Round @round_number</h3>', [
-                '@round_number' => $round_number,
-              ]),
-              '#prefix' => '<div class="cows-row"><div class="cows-column">',
-            ];
-
-            $rows = [];
             $farmers = 0;
             $all_animals = 0;
             foreach ($rounds as $round) {
@@ -563,38 +559,6 @@ return to this page to process the next round of results.</em>'),
               $all_animals += $round->cows;
             }
             $average_revenue = $a - (($b / $farmers) * $all_animals);
-
-            foreach ($rounds as $round) {
-              $player_name = '';
-              if ($round->show_names) {
-                $player = $this->repository->loadPlayer(['pid' => $round->pid]);
-                $player_name .= $player[0]->lastname . ', ' . $player[0]->firstname;
-              }
-
-              $rows[] = [
-                $player_name,
-                $round->cows,
-                round($round->cows * ($average_revenue - $cost), 2),
-                round($average_revenue - 100, 2),
-              ];
-            }
-
-            $content['round_' . $round_number . '_details_table'] = [
-              '#type' => 'table',
-              '#header' => $rounds_details_header,
-              '#rows' => $rows,
-              '#empty' => $this->t('No players'),
-              '#attributes' => ['class' => ['views-table']],
-            ];
-
-            $content['round_' . $round_number . '_summary'] = [
-              '#type' => 'markup',
-              '#markup' => $this->t('<h3>Summary of Round @round_number</h3>', [
-                '@round_number' => $round_number,
-              ]),
-              '#prefix' => '</div><div class="cows-column">',
-            ];
-
             $optimal = $farmers * (2 * $b);
             $optimal_profit_per_cow = (($a - $cost) / 2);
             $optimal_profit_per_farmer = (($a - $cost) / 2) * (2 * $b);
@@ -623,13 +587,53 @@ return to this page to process the next round of results.</em>'),
               '$' . round($optimal_profit_per_farmer, 2),
             ];
 
+            $content['round_' . $round_number . '_summary'] = [
+              '#type' => 'markup',
+              '#markup' => $this->t('<h3>Summary of Round @round_number</h3>', [
+                '@round_number' => $round_number,
+              ]),
+              '#prefix' => '<div class="cows-summary">',
+            ];
+
             $content['round_' . $round_number . '_summary_table'] = [
               '#type' => 'table',
               '#header' => $rounds_summary_header,
               '#rows' => $summary_rows,
               '#empty' => $this->t('No players'),
               '#attributes' => ['class' => ['views-table']],
-              '#suffix' => '</div>',
+              '#suffix' => '<p>total milk production</p></div>',
+            ];
+
+            $content['round_' . $round_number . '_details'] = [
+              '#type' => 'markup',
+              '#markup' => $this->t('<h3>Details of Round @round_number</h3>', [
+                '@round_number' => $round_number,
+              ]),
+              '#prefix' => '<div class="cows-row clearfix"><div class="cows-column left">',
+            ];
+
+            $rows = [];
+            foreach ($rounds as $round) {
+              $player_name = '';
+              if ($round->show_names) {
+                $player = $this->repository->loadPlayer(['pid' => $round->pid]);
+                $player_name .= $player[0]->lastname . ', ' . $player[0]->firstname;
+              }
+
+              $rows[] = [
+                $player_name,
+                $round->cows,
+                round($round->cows * ($average_revenue - $cost), 2),
+                round($average_revenue - 100, 2),
+              ];
+            }
+
+            $content['round_' . $round_number . '_details_table'] = [
+              '#type' => 'table',
+              '#header' => $rounds_details_header,
+              '#rows' => $rows,
+              '#empty' => $this->t('No players'),
+              '#attributes' => ['class' => ['views-table']],
             ];
 
             $commons = '';
@@ -651,16 +655,15 @@ return to this page to process the next round of results.</em>'),
                 $partlines = 0;
               }
               $blanklines = $farmers - ($fulllines + $partlines);
-              $commons .= str_repeat('<IMG CLASS="cows" SRC="' . $images . '/10' . $color . '.gif" HEIGHT=14 WIDTH=210><IMG CLASS="cows" SRC="' . $images . '/10' . $color . '.gif" HEIGHT=14 WIDTH=210><BR>', $fulllines);
+              $commons .= str_repeat('<IMG CLASS="cows" SRC="' . $images . '/10' . $color . '.gif" HEIGHT=14 WIDTH=210><IMG CLASS="cows" SRC="' . $images . '/10' . $color . '.gif" HEIGHT=14 WIDTH=210>', $fulllines);
               $commons .= str_repeat('<IMG CLASS="cows" SRC="' . $images . '/1' . $color . '.gif" HEIGHT=14 WIDTH=21>', $ones);
               $commons .= str_repeat('<IMG CLASS="cows" SRC="' . $images . '/blank' . $color . '.gif" HEIGHT=14 WIDTH=21>', $blanks);
-              $commons .= '<BR>';
-              $commons .= str_repeat('<IMG CLASS="cows" SRC="' . $images . '/blank' . $color . '.gif" HEIGHT=14 WIDTH=420><BR>', $blanklines);
+              $commons .= str_repeat('<IMG CLASS="cows" SRC="' . $images . '/blank' . $color . '.gif" HEIGHT=14 WIDTH=420>', $blanklines);
             }
             else {
-              $commons .= str_repeat('<IMG CLASS="cows" SRC="' . $images . '/10' . $color . '.gif" HEIGHT=14 WIDTH=210><IMG CLASS="cows" SRC="' . $images . '/10' . $color . '.gif" HEIGHT=14 WIDTH=210><BR>', $farmers);
+              $commons .= str_repeat('<IMG CLASS="cows" SRC="' . $images . '/10' . $color . '.gif" HEIGHT=14 WIDTH=210><IMG CLASS="cows" SRC="' . $images . '/10' . $color . '.gif" HEIGHT=14 WIDTH=210>', $farmers);
               $color = "grey";
-              $commons .= str_repeat('<IMG CLASS="cows" SRC="' . $images . '/10' . $color . '.gif" HEIGHT=14 WIDTH=210><IMG CLASS="cows" SRC="' . $images . '/10' . $color . '.gif" HEIGHT=14 WIDTH=210><BR>', ($fulllines - $farmers));
+              $commons .= str_repeat('<IMG CLASS="cows" SRC="' . $images . '/10' . $color . '.gif" HEIGHT=14 WIDTH=210><IMG CLASS="cows" SRC="' . $images . '/10' . $color . '.gif" HEIGHT=14 WIDTH=210>', ($fulllines - $farmers));
               $commons .= str_repeat('<IMG CLASS="cows" SRC="' . $images . '/1' . $color . '.gif" HEIGHT=14 WIDTH=21>', $ones);
             }
 
@@ -669,7 +672,7 @@ return to this page to process the next round of results.</em>'),
               '#markup' => $this->t('<h3>Area of Round @round_number</h3>', [
                 '@round_number' => $round_number,
               ]) . $commons,
-              '#prefix' => '<div class="cows-column">',
+              '#prefix' => '</div><div class="cows-column right">',
               '#suffix' => '</div></div>',
             ];
           }
