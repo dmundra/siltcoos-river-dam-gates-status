@@ -1859,11 +1859,11 @@
             ],
             "authors": [
                 {
-                    "name": "Berdir",
+                    "name": "berdir",
                     "homepage": "https://www.drupal.org/user/214652"
                 },
                 {
-                    "name": "Dave Reid",
+                    "name": "dave reid",
                     "homepage": "https://www.drupal.org/user/53892"
                 },
                 {
@@ -1891,17 +1891,17 @@
         },
         {
             "name": "drupal/tragedy_commons",
-            "version": "1.0.4-alpha3",
+            "version": "1.0.4-alpha4",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/tragedy_commons.git",
-                "reference": "1.0.4-alpha3"
+                "reference": "1.0.4-alpha4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/tragedy_commons-1.0.4-alpha3.zip",
-                "reference": "1.0.4-alpha3",
-                "shasum": "a792f427a26f1e0faabf6a079c4c1fe8b8e09e57"
+                "url": "https://ftp.drupal.org/files/projects/tragedy_commons-1.0.4-alpha4.zip",
+                "reference": "1.0.4-alpha4",
+                "shasum": "8d1aa90675fdb14fb408433e62ac0abf01e84bf2"
             },
             "require": {
                 "drupal/core": "^10 || ^11"
@@ -1912,8 +1912,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "1.0.4-alpha3",
-                    "datestamp": "1728253697",
+                    "version": "1.0.4-alpha4",
+                    "datestamp": "1728851778",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -1939,16 +1939,16 @@
         },
         {
             "name": "drush/drush",
-            "version": "13.2.0",
+            "version": "13.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drush-ops/drush.git",
-                "reference": "6a3f0cfe0abab49f42e83602469049506d75035d"
+                "reference": "881a2bd6c99aafaba5274d2244037d1738c2473d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drush-ops/drush/zipball/6a3f0cfe0abab49f42e83602469049506d75035d",
-                "reference": "6a3f0cfe0abab49f42e83602469049506d75035d",
+                "url": "https://api.github.com/repos/drush-ops/drush/zipball/881a2bd6c99aafaba5274d2244037d1738c2473d",
+                "reference": "881a2bd6c99aafaba5274d2244037d1738c2473d",
                 "shasum": ""
             },
             "require": {
@@ -1993,7 +1993,8 @@
                 "squizlabs/php_codesniffer": "^3.7"
             },
             "bin": [
-                "drush"
+                "drush",
+                "drush.php"
             ],
             "type": "library",
             "extra": {
@@ -2074,7 +2075,7 @@
                 "issues": "https://github.com/drush-ops/drush/issues",
                 "security": "https://github.com/drush-ops/drush/security/advisories",
                 "slack": "https://drupal.slack.com/messages/C62H9CWQM",
-                "source": "https://github.com/drush-ops/drush/tree/13.2.0"
+                "source": "https://github.com/drush-ops/drush/tree/13.3.0"
             },
             "funding": [
                 {
@@ -2082,7 +2083,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-09-10T13:16:15+00:00"
+            "time": "2024-10-08T11:42:23+00:00"
         },
         {
             "name": "egulias/email-validator",
@@ -2586,7 +2587,7 @@
         },
         {
             "name": "illuminate/collections",
-            "version": "v11.26.0",
+            "version": "v11.27.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/collections.git",
@@ -2641,7 +2642,7 @@
         },
         {
             "name": "illuminate/conditionable",
-            "version": "v11.26.0",
+            "version": "v11.27.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/conditionable.git",
@@ -2687,7 +2688,7 @@
         },
         {
             "name": "illuminate/contracts",
-            "version": "v11.26.0",
+            "version": "v11.27.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/contracts.git",
@@ -2735,7 +2736,7 @@
         },
         {
             "name": "illuminate/macroable",
-            "version": "v11.26.0",
+            "version": "v11.27.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/macroable.git",
@@ -3037,16 +3038,16 @@
         },
         {
             "name": "nikic/php-parser",
-            "version": "v5.3.0",
+            "version": "v5.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "3abf7425cd284141dc5d8d14a9ee444de3345d1a"
+                "reference": "8eea230464783aa9671db8eea6f8c6ac5285794b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/3abf7425cd284141dc5d8d14a9ee444de3345d1a",
-                "reference": "3abf7425cd284141dc5d8d14a9ee444de3345d1a",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/8eea230464783aa9671db8eea6f8c6ac5285794b",
+                "reference": "8eea230464783aa9671db8eea6f8c6ac5285794b",
                 "shasum": ""
             },
             "require": {
@@ -3089,9 +3090,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nikic/PHP-Parser/issues",
-                "source": "https://github.com/nikic/PHP-Parser/tree/v5.3.0"
+                "source": "https://github.com/nikic/PHP-Parser/tree/v5.3.1"
             },
-            "time": "2024-09-29T13:56:26+00:00"
+            "time": "2024-10-08T18:51:32+00:00"
         },
         {
             "name": "pear/archive_tar",
@@ -6844,16 +6845,16 @@
         },
         {
             "name": "phpstan/phpdoc-parser",
-            "version": "1.32.0",
+            "version": "1.33.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpdoc-parser.git",
-                "reference": "6ca22b154efdd9e3c68c56f5d94670920a1c19a4"
+                "reference": "82a311fd3690fb2bf7b64d5c98f912b3dd746140"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/6ca22b154efdd9e3c68c56f5d94670920a1c19a4",
-                "reference": "6ca22b154efdd9e3c68c56f5d94670920a1c19a4",
+                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/82a311fd3690fb2bf7b64d5c98f912b3dd746140",
+                "reference": "82a311fd3690fb2bf7b64d5c98f912b3dd746140",
                 "shasum": ""
             },
             "require": {
@@ -6885,9 +6886,9 @@
             "description": "PHPDoc parser with support for nullable, intersection and generic types",
             "support": {
                 "issues": "https://github.com/phpstan/phpdoc-parser/issues",
-                "source": "https://github.com/phpstan/phpdoc-parser/tree/1.32.0"
+                "source": "https://github.com/phpstan/phpdoc-parser/tree/1.33.0"
             },
-            "time": "2024-09-26T07:23:32+00:00"
+            "time": "2024-10-13T11:25:22+00:00"
         },
         {
             "name": "sirbrillig/phpcs-variable-analysis",

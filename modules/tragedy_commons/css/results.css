@@ -14,9 +14,13 @@
 }
 .cows-row {
   display: block;
+  padding: 10px 0;
 }
 .cows-row > .cows-column {
   margin: 0 auto;
+}
+.cows-column.right {
+  width: 420px;
 }
 @media (min-width: 768px) {
   .cows-row {
@@ -24,8 +28,5 @@
   }
   .cows-column.left {
     width: 220px;
-  }
-  .cows-column.right {
-    width: 420px;
   }
 }

@@ -196,3 +196,36 @@ Web: https://ronaldbmitchell.com/', $email_string_params, $options);
       break;
   }
 }
+
+/**
+ * Implements hook_cron().
+ */
+function tragedy_commons_cron() {
+  $game_results = \Drupal::database()->select('tragedy_commons_multi', 'g')
+    ->fields('g', ['gid', 'created'])
+    ->condition('g.created', strtotime('-3 months'), '<')
+    ->execute();
+
+  foreach ($game_results as $game) {
+    $gid = $game->gid;
+    \Drupal::logger('tragedy_commons')->info(t('Deleting rounds, players, and request for request :gid which was created :created, which is older than 3 months.', [
+      ':gid' => $gid,
+      ':created' => date('m/d/Y H:i:s', $game->created),
+    ]));
+
+    // Deleted rounds.
+    \Drupal::database()->delete('tragedy_commons_multi_round')
+      ->condition('gid', $gid)
+      ->execute();
+
+    // Delete players.
+    \Drupal::database()->delete('tragedy_commons_multi_player')
+      ->condition('gid', $gid)
+      ->execute();
+
+    // Delete games.
+    \Drupal::database()->delete('tragedy_commons_multi')
+      ->condition('gid', $gid)
+      ->execute();
+  }
+}
