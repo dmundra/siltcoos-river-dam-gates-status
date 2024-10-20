@@ -127,8 +127,9 @@ class RequestsApproveForm extends FormBase implements FormInterface, ContainerIn
       $from = $this->config('system.site')->get('mail');
       $params = [
         'gid' => $request->gid,
-        'first_name' => $request->firstname,
-        'last_name' => $request->lastname,
+        'test_gid' => $request->gid + 1,
+        'firstname' => $request->firstname,
+        'lastname' => $request->lastname,
       ];
       $language_code = $this->languageManager->getDefaultLanguage()->getId();
 
