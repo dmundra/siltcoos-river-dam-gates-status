@@ -70,12 +70,12 @@ class NumberOfCowsForm extends FormBase implements FormInterface, ContainerInjec
   /**
    * {@inheritDoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, $request = NULL, $player = NULL, $test = FALSE) {
+  public function buildForm(array $form, FormStateInterface $form_state, $request = NULL, $player = NULL) {
     $form = [];
 
     $form_state->set('request', $request);
     $form_state->set('player', $player);
-    $form_state->set('test', $test);
+    $form_state->set('test', $request->test);
 
     $form['cows'] = [
       '#type' => 'number',
@@ -116,11 +116,7 @@ class NumberOfCowsForm extends FormBase implements FormInterface, ContainerInjec
     $return = $this->repository->insertRound($round);
     if ($return) {
       $this->messenger()->addMessage($this->t('Thanks for playing another round of the game.'));
-      $query = [];
-      if ($test) {
-        $query['test'] = TRUE;
-      }
-      $form_state->setRedirect('tragedy_commons.gamespace_wait', ['gid' => $gid, 'pid' => $pid, 'rid' => $return], ['query' => $query]);
+      $form_state->setRedirect('tragedy_commons.gamespace_wait', ['gid' => $gid, 'pid' => $pid, 'rid' => $return]);
     }
   }
 

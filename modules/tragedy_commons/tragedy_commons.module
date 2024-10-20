@@ -13,7 +13,6 @@ use Drupal\markdown\Markdown;
 const TRAGEDY_COMMONS_REQUEST = 'Request';
 const TRAGEDY_COMMONS_ACCEPTED = 'Accepted';
 const TRAGEDY_COMMONS_REJECTED = 'Rejected';
-const TRAGEDY_COMMONS_REVIEWER = 'rmitchel@uoregon.edu,dmundra@me.com';
 
 /**
  * Implements hook_help().
@@ -110,14 +109,16 @@ Web: https://ronaldbmitchell.com/', $email_string_params, $options);
 
     case 'request_approved':
       $module_base_url = new Url('tragedy_commons.base', [], ['absolute' => TRUE]);
-      $password = strtolower($params['last_name']) . '-' . $params['gid'];
+      $test_password = strtolower($params['lastname']) . '-' . $params['test_gid'];
+      $password = strtolower($params['lastname']) . '-' . $params['gid'];
       $email_string_params = [
-        '@firstname' => $params['first_name'],
-        '@lastname' => $params['last_name'],
+        '@firstname' => $params['firstname'],
+        '@lastname' => $params['lastname'],
         '@hbase' => $module_base_url->toString(),
-        '@testpassword' => $password . '-test',
+        '@test_password' => $test_password,
+        '@test_gid' => $params['test_gid'],
         '@password' => $password,
-        '@id' => $params['gid'],
+        '@gid' => $params['gid'],
       ];
       $message['subject'] = t('Tragedy of the Commons Game Request Approved', [], $options);
       $body = t('@firstname @lastname,
@@ -129,14 +130,14 @@ I have set up two passwords so your class can play. It is EXTREMELY important th
 Most importantly, please do a practice run first by getting two or three research assistants or colleagues together. Each of those who will be playing the game to TEST IT should go to:
     @hbase/
 and entering the TEST password in the box in the "Enter Password" box. Your test password is:
-   @testpassword
+   @test_password
 You will MANAGE the playing of the TEST game at the following page:
-   @hbase/gamespace/@id/manage?test=1
+   @hbase/gamespace/@test_gid/manage
 
 If that works successfully, then you can play the game with your class by having all your students go to the same page (@hbase/) and have each enter the CLASS password in the "Enter Password" box.  Your class password is:
    @password
 You will MANAGE the playing of the CLASS game at the following page:
-   @hbase/gamespace/@id/manage
+   @hbase/gamespace/@gid/manage
 
 The practice will make sure you understand the mechanics of how the game works and thereby avoid the embarrassment of it not working properly with the class. It usually works smoothly but it is important that you test it. You can play it anytime - I don\'t need to know when.
 
@@ -194,38 +195,5 @@ Email: rmitchel@uoregon.edu
 Web: https://ronaldbmitchell.com/', $email_string_params, $options);
       $message['body'][] = Html::escape($body);
       break;
-  }
-}
-
-/**
- * Implements hook_cron().
- */
-function tragedy_commons_cron() {
-  $game_results = \Drupal::database()->select('tragedy_commons_multi', 'g')
-    ->fields('g', ['gid', 'created'])
-    ->condition('g.created', strtotime('-3 months'), '<')
-    ->execute();
-
-  foreach ($game_results as $game) {
-    $gid = $game->gid;
-    \Drupal::logger('tragedy_commons')->info(t('Deleting rounds, players, and request for request :gid which was created :created, which is older than 3 months.', [
-      ':gid' => $gid,
-      ':created' => date('m/d/Y H:i:s', $game->created),
-    ]));
-
-    // Deleted rounds.
-    \Drupal::database()->delete('tragedy_commons_multi_round')
-      ->condition('gid', $gid)
-      ->execute();
-
-    // Delete players.
-    \Drupal::database()->delete('tragedy_commons_multi_player')
-      ->condition('gid', $gid)
-      ->execute();
-
-    // Delete games.
-    \Drupal::database()->delete('tragedy_commons_multi')
-      ->condition('gid', $gid)
-      ->execute();
   }
 }

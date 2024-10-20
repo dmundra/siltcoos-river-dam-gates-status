@@ -12,7 +12,6 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Mail\MailManagerInterface;
 use Drupal\Core\Messenger\MessengerTrait;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\Core\Url;
 use Drupal\tragedy_commons\TragedyCommonsRepository;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -193,13 +192,19 @@ Web: <a href="https://ronaldbmitchell.com/">https://ronaldbmitchell.com/</a><br/
       'email' => $form_state->getValue('email'),
       'institution' => $form_state->getValue('institution'),
       'description' => $form_state->getValue('description'),
-      'status' => TRAGEDY_COMMONS_REQUEST,
+      'status' => TRAGEDY_COMMONS_ACCEPTED,
       'created' => $this->timeService->getRequestTime(),
       'updated' => $this->timeService->getRequestTime(),
+      'test' => 0,
     ];
+    // Create test entry.
+    $test_entry = $entry;
+    $test_entry['test'] = TRUE;
+    $test_return = $this->repository->insert($test_entry);
+    // Create main entry.
     $return = $this->repository->insert($entry);
-    if ($return) {
-      $this->messenger()->addMessage($this->t('Request for @firstname @lastname @email (@institution) received.<br/>Purpose: @description', [
+    if ($return && $test_return) {
+      $this->messenger()->addMessage($this->t('Request for @firstname @lastname @email (@institution) received and approved.<br/>Purpose: @description', [
         '@firstname' => $entry['firstname'],
         '@lastname' => $entry['lastname'],
         '@email' => $entry['email'],
@@ -212,32 +217,20 @@ Web: <a href="https://ronaldbmitchell.com/">https://ronaldbmitchell.com/</a><br/
       $to = $entry['email'];
       $from = $this->config('system.site')->get('mail');
       $params = $form_state->getValues();
-      $request_url = new Url('tragedy_commons.result', ['gid' => $return], ['absolute' => TRUE]);
-      $params['request_page'] = $request_url->toString();
+      $params['gid'] = $return;
+      $params['test_gid'] = $test_return;
       $language_code = $this->languageManager->getDefaultLanguage()->getId();
 
-      $result = $this->mailManager->mail($module, 'request', $to, $language_code, $params, $from);
+      $result = $this->mailManager->mail($module, 'request_approved', $to, $language_code, $params, $from);
       if ($result['result']) {
-        $this->messenger()->addMessage($this->t('Request confirmation email sent to @email.', [
+        $this->messenger()->addMessage($this->t('Request approved email sent to @email.', [
           '@email' => $to,
         ]));
+        $form_state->setRedirect('tragedy_commons.requests_instructions');
       }
       else {
-        $this->messenger()->addMessage($this->t('There was a problem sending request confirmation email to @email and it was not sent.', [
+        $this->messenger()->addMessage($this->t('There was a problem sending request approved email to @email and it was not sent.', [
           '@email' => $to,
-        ]), 'error');
-      }
-
-      // Sent email to request reviewer.
-      $result = $this->mailManager->mail($module, 'request_reviewer', TRAGEDY_COMMONS_REVIEWER, $language_code, $params, $from);
-      if ($result['result']) {
-        $this->messenger()->addMessage($this->t('Request reviewer email sent to @email.', [
-          '@email' => TRAGEDY_COMMONS_REVIEWER,
-        ]));
-      }
-      else {
-        $this->messenger()->addMessage($this->t('There was a problem sending request reviewer email to @email and it was not sent.', [
-          '@email' => TRAGEDY_COMMONS_REVIEWER,
         ]), 'error');
       }
     }

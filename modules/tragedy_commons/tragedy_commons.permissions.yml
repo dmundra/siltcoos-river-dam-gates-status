@@ -1,16 +1,16 @@
 view tragedy of the commons:
   title: 'View Tragedy of the Commons'
-  description: 'Allow users with role to view the Tragedy of the Commons games.'
+  description: 'Allow users with role to play the Tragedy of the Commons games.'
   restrict access: false
 
 play tragedy of the commons:
   title: 'Play Tragedy of the Commons game'
-  description: 'Allow users with role to play the Tragedy of the Commons games.'
+  description: 'Allow users with role to request a Tragedy of the Commons game.'
   restrict access: false
 
 view tragedy of the commons results:
   title: 'View Tragedy of the Commons Results'
-  description: 'Allow users with role to view the Tragedy of the Commons results.'
+  description: 'Allow users with role to view the Tragedy of the Commons results. For admins.'
   restrict access: false
 
 #delete tragedy of the commons results:

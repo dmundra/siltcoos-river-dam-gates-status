@@ -77,6 +77,14 @@ tragedy_commons.requests:
   requirements:
     _permission: 'play tragedy of the commons'
 
+tragedy_commons.requests_instructions:
+  path: '/tragedy_of_the_commons/requests/instructions'
+  defaults:
+    _controller: '\Drupal\tragedy_commons\Controller\GameController::instructions'
+    _title: 'Tragedy of the Commons Game Instructions'
+  requirements:
+    _permission: 'play tragedy of the commons'
+
 tragedy_commons.pdgame1:
   path: '/tragedy_of_the_commons/pdgame1'
   defaults:

@@ -2,6 +2,7 @@
 
 namespace Drupal\tragedy_commons\Controller;
 
+use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Database\Connection;
@@ -88,9 +89,10 @@ class GameController extends ControllerBase {
 
     if (!empty($entries)) {
       foreach ($entries as $request) {
-        return $this->t("@firstname @lastname's Game Start Page", [
+        return $this->t("@firstname @lastname's Game Start Page%test", [
           '@firstname' => $request->firstname,
           '@lastname' => $request->lastname,
+          '%test' => $request->test ? ' - Test' : '',
         ]);
       }
     }
@@ -108,9 +110,7 @@ class GameController extends ControllerBase {
 
     if (!empty($entries)) {
       foreach ($entries as $request) {
-        $test = $this->stack->getCurrentRequest()->query->get('test') ?? 0;
-
-        $content['form'] = $this->formBuilder->getForm('Drupal\tragedy_commons\Form\StartPageForm', $request, $test);
+        $content['form'] = $this->formBuilder->getForm('Drupal\tragedy_commons\Form\StartPageForm', $request);
 
         $content['intro']['#attached']['library'][] = 'tragedy_commons/games';
 
@@ -214,6 +214,10 @@ directed to that page, you will need to click on your browser\'s BACK button to
 return to this page to process the next round of results.</em>'),
         ];
 
+        if ($entry->test) {
+          $items[] = $this->t('<p><strong><em>This is a test play through.</em></strong></p>');
+        }
+
         $content['result'] = [
           '#theme' => 'item_list',
           '#items' => $items,
@@ -261,6 +265,9 @@ return to this page to process the next round of results.</em>'),
    */
   public function play($gid, $pid) {
     $content = [];
+    $a = 500;
+    $b = 10;
+    $cost = 100;
 
     $entries = $this->repository->load(['gid' => $gid, 'status' => TRAGEDY_COMMONS_ACCEPTED]);
 
@@ -269,18 +276,16 @@ return to this page to process the next round of results.</em>'),
         $players = $this->repository->loadPlayer(['pid' => $pid, 'gid' => $gid]);
         if (!empty($players)) {
           foreach ($players as $player) {
-            $test = $this->stack->getCurrentRequest()->query->get('test') ?? 0;
-
-            $content['intro'] = [
+            $content['player_intro'] = [
               '#type' => 'markup',
               '#markup' => $this->t('<p>Welcome, :first_name! This is your Web Page for playing the Tragedy of the Commons Game. During the course of the game, please stay on this page. Good luck and enjoy!</p>', [
                 ':first_name' => $player->firstname,
               ]),
             ];
 
-            $content['intro']['#attached']['library'][] = 'tragedy_commons/games';
+            $content['player_intro']['#attached']['library'][] = 'tragedy_commons/games';
 
-            if ($test) {
+            if ($request->test) {
               $content['test_intro'] = [
                 '#type' => 'markup',
                 '#markup' => $this->t('<p><strong><em>This is a test play through.</em></strong></p>'),
@@ -319,6 +324,8 @@ return to this page to process the next round of results.</em>'),
                 'data' => $this->t('Number of cows'),
                 'field' => 'r.cows',
               ],
+              'revenue' => $this->t('Revenue or Loss'),
+              'profit' => $this->t('Profit Per Cow'),
               'started' => ['data' => $this->t('Started'), 'field' => 'r.started', 'sort' => 'desc'],
               'updated' => ['data' => $this->t('Updated'), 'field' => 'r.updated'],
               'completed' => ['data' => $this->t('Completed'), 'field' => 'r.completed'],
@@ -344,6 +351,27 @@ return to this page to process the next round of results.</em>'),
                 $completed_text = $this->t('Yes');
                 $round_completed = TRUE;
               }
+
+              // Get average revenue amongst all farmers.
+              $average_revenue = 0;
+              if ($round->round_number > 0) {
+                $query = $this->database->select('tragedy_commons_multi_round', 'r')
+                  ->condition('r.gid', $gid)
+                  ->condition('r.round_number', $round->round_number)
+                  ->orderBy('r.rid');
+                $query->fields('r');
+                $get_all_rounds = $query->execute()->fetchAll();
+                if (!empty($get_all_rounds)) {
+                  $farmers = 0;
+                  $all_animals = 0;
+                  foreach ($get_all_rounds as $get_all_round) {
+                    $farmers++;
+                    $all_animals += $get_all_round->cows;
+                  }
+                  $average_revenue = $a - (($b / $farmers) * $all_animals);
+                }
+              }
+
               $rows[] = [
                 'rid' => new Link($round->rid, new Url('tragedy_commons.gamespace_wait', [
                   'gid' => $gid,
@@ -352,6 +380,8 @@ return to this page to process the next round of results.</em>'),
                 ])),
                 'round_number' => $round->round_number > 0 ? $round->round_number : $this->t('TBD'),
                 'cows' => Html::escape($round->cows),
+                'revenue' => $average_revenue > 0 ? round($round->cows * ($average_revenue - $cost), 2) : $this->t('TBD'),
+                'profit' => $average_revenue > 0 ? round($average_revenue - 100, 2) : $this->t('TBD'),
                 'started' => date('m/d/Y', $round->started),
                 'updated' => date('m/d/Y', $round->updated),
                 'completed' => $completed_text,
@@ -359,8 +389,24 @@ return to this page to process the next round of results.</em>'),
               ];
             }
 
+            $content['results_title'] = [
+              '#type' => 'markup',
+              '#markup' => $this->t('<h2>Class Results:</h2>'),
+            ];
+            $results_content = $this->results($gid);
+            $content += $results_content;
+
+            $content['table'] = [
+              '#type' => 'table',
+              '#header' => $header,
+              '#rows' => $rows,
+              '#empty' => $this->t('No rounds.'),
+              '#caption' => $this->t('Your Results So Far:'),
+              '#attributes' => ['class' => ['views-table']],
+            ];
+
             if ($round_completed || empty($rows)) {
-              $content['form'] = $this->formBuilder->getForm('Drupal\tragedy_commons\Form\NumberOfCowsForm', $request, $player, $test);
+              $content['form'] = $this->formBuilder->getForm('Drupal\tragedy_commons\Form\NumberOfCowsForm', $request, $player);
             }
             else {
               $content['not_completed'] = [
@@ -368,19 +414,10 @@ return to this page to process the next round of results.</em>'),
                 '#markup' => $this->t('<h2>Current Round</h2><p>Round is not completed. Click on the round to wait for results.</p>'),
               ];
             }
-
-            $content['table'] = [
-              '#type' => 'table',
-              '#header' => $header,
-              '#rows' => $rows,
-              '#empty' => $this->t('No rounds.'),
-              '#caption' => $this->t('Current rounds'),
-              '#attributes' => ['class' => ['views-table']],
-            ];
           }
         }
         else {
-          $content['notfound'] = [
+          $content['player_notfound'] = [
             '#type' => 'markup',
             '#markup' => $this->t('<em>Player not found</em>.'),
           ];
@@ -415,7 +452,6 @@ return to this page to process the next round of results.</em>'),
             $rounds = $this->repository->loadRound(['rid' => $rid, 'pid' => $pid, 'gid' => $gid]);
             if (!empty($rounds)) {
               foreach ($rounds as $round) {
-                $test = $this->stack->getCurrentRequest()->query->get('test') ?? 0;
                 $content['intro'] = [
                   '#type' => 'markup',
                   '#markup' => $this->t('<p id="wait"><strong>The program is working. As soon as all the data for the class has been processed, you will be automatically returned to your game page to enter a new round of data.</strong></p>'),
@@ -428,13 +464,14 @@ return to this page to process the next round of results.</em>'),
                     'pid' => $pid,
                     'rid' => $rid,
                   ]))->toString(),
-                  'returnUri' => (new Url('tragedy_commons.gamespace_results', [
+                  'returnUri' => (new Url('tragedy_commons.gamespace_player', [
                     'gid' => $gid,
+                    'pid' => $pid,
                   ]))->toString(),
                 ];
                 $content['intro']['#attached']['library'][] = 'tragedy_commons/wait';
 
-                if ($test) {
+                if ($request->test) {
                   $content['test_intro'] = [
                     '#type' => 'markup',
                     '#markup' => $this->t('<p><strong><em>This is a test play through.</em></strong></p>'),
@@ -527,7 +564,7 @@ return to this page to process the next round of results.</em>'),
           ->range(0, 1);
         $query->fields('r');
         $round = $query->execute()->fetchAll();
-        $number_of_rounds = $round[0]->round_number;
+        $number_of_rounds = isset($round[0]) ? $round[0]->round_number : 0;
 
         $rounds_details_header = [
           $this->t('Name'),
@@ -655,16 +692,16 @@ return to this page to process the next round of results.</em>'),
                 $partlines = 0;
               }
               $blanklines = $farmers - ($fulllines + $partlines);
-              $commons .= str_repeat('<IMG CLASS="cows" SRC="' . $images . '/10' . $color . '.gif" HEIGHT=14 WIDTH=210><IMG CLASS="cows" SRC="' . $images . '/10' . $color . '.gif" HEIGHT=14 WIDTH=210>', $fulllines);
-              $commons .= str_repeat('<IMG CLASS="cows" SRC="' . $images . '/1' . $color . '.gif" HEIGHT=14 WIDTH=21>', $ones);
-              $commons .= str_repeat('<IMG CLASS="cows" SRC="' . $images . '/blank' . $color . '.gif" HEIGHT=14 WIDTH=21>', $blanks);
-              $commons .= str_repeat('<IMG CLASS="cows" SRC="' . $images . '/blank' . $color . '.gif" HEIGHT=14 WIDTH=420>', $blanklines);
+              $commons .= str_repeat('<IMG ALT="10 cows of ' . $color . ' color" CLASS="cows" SRC="' . $images . '/10' . $color . '.gif" HEIGHT=14 WIDTH=210><IMG ALT="10 cows of ' . $color . ' color" CLASS="cows" SRC="' . $images . '/10' . $color . '.gif" HEIGHT=14 WIDTH=210>', $fulllines);
+              $commons .= str_repeat('<IMG ALT="1 cow of ' . $color . ' color" CLASS="cows" SRC="' . $images . '/1' . $color . '.gif" HEIGHT=14 WIDTH=21>', $ones);
+              $commons .= str_repeat('<IMG ALT="Blank field of ' . $color . ' color" CLASS="cows" SRC="' . $images . '/blank' . $color . '.gif" HEIGHT=14 WIDTH=21>', $blanks);
+              $commons .= str_repeat('<IMG ALT="Blank line of ' . $color . ' color" CLASS="cows" SRC="' . $images . '/blank' . $color . '.gif" HEIGHT=14 WIDTH=420>', $blanklines);
             }
             else {
-              $commons .= str_repeat('<IMG CLASS="cows" SRC="' . $images . '/10' . $color . '.gif" HEIGHT=14 WIDTH=210><IMG CLASS="cows" SRC="' . $images . '/10' . $color . '.gif" HEIGHT=14 WIDTH=210>', $farmers);
+              $commons .= str_repeat('<IMG ALT="10 cows of ' . $color . ' color" CLASS="cows" SRC="' . $images . '/10' . $color . '.gif" HEIGHT=14 WIDTH=210><IMG ALT="10 cows of ' . $color . ' color" CLASS="cows" SRC="' . $images . '/10' . $color . '.gif" HEIGHT=14 WIDTH=210>', $farmers);
               $color = "grey";
-              $commons .= str_repeat('<IMG CLASS="cows" SRC="' . $images . '/10' . $color . '.gif" HEIGHT=14 WIDTH=210><IMG CLASS="cows" SRC="' . $images . '/10' . $color . '.gif" HEIGHT=14 WIDTH=210>', ($fulllines - $farmers));
-              $commons .= str_repeat('<IMG CLASS="cows" SRC="' . $images . '/1' . $color . '.gif" HEIGHT=14 WIDTH=21>', $ones);
+              $commons .= str_repeat('<IMG ALT="10 cows of ' . $color . ' color" CLASS="cows" SRC="' . $images . '/10' . $color . '.gif" HEIGHT=14 WIDTH=210><IMG ALT="10 cows of ' . $color . ' color" CLASS="cows" SRC="' . $images . '/10' . $color . '.gif" HEIGHT=14 WIDTH=210>', ($fulllines - $farmers));
+              $commons .= str_repeat('<IMG ALT="1 cow of ' . $color . ' color" CLASS="cows" SRC="' . $images . '/1' . $color . '.gif" HEIGHT=14 WIDTH=21>', $ones);
             }
 
             $content['round_' . $round_number . '_pasture'] = [
@@ -690,6 +727,22 @@ return to this page to process the next round of results.</em>'),
     $content['#cache']['max-age'] = 0;
 
     return $content;
+  }
+
+  /**
+   * Instructions after submitting request.
+   */
+  public function instructions() {
+    $output = [];
+
+    $output['intro'] = [
+      '#type' => 'markup',
+      '#markup' => new FormattableMarkup("<p>Your game has been approved and is ready to play. This game allows you to play one game, of multiple rounds for one class session.</p><p><strong>If you want to play the game in more than one class</strong>, <a href='@url'>fill in the form again</a> - filling it in one time for each class but add a different letter (NOT a number) to the end of your last name (e.g., mitchella, mitchellb, mitchellc). Why? Because last names are the passwords for each game.</p><p>If the game doesn't work or the results are problematic fill out the request form again to get a new game.</p>", [
+        '@url' => (new Url('tragedy_commons.requests'))->toString(),
+      ]),
+    ];
+
+    return $output;
   }
 
 }

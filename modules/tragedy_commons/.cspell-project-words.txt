@@ -28,3 +28,6 @@ traineerate
 blanklines
 fulllines
 partlines
+mitchella
+mitchellb
+mitchellc

@@ -77,6 +77,7 @@ class RequestsController extends ControllerBase {
     foreach ($entries as $entry) {
       $items = [
         $this->t('<strong>Id:</strong> %gid', ['%gid' => $entry->gid]),
+        $this->t('<strong>Test:</strong> %test', ['%test' => $entry->test ? 'Yes' : 'No']),
         $this->t('<strong>First name:</strong> %firstname', ['%firstname' => $entry->firstname]),
         $this->t('<strong>Last name:</strong> %lastname', ['%lastname' => $entry->lastname]),
         $this->t('<strong>Email:</strong> %email', ['%email' => $entry->email]),
@@ -125,6 +126,7 @@ class RequestsController extends ControllerBase {
     $rows = [];
     $header = [
       'gid' => ['data' => $this->t('Id'), 'field' => 't.gid'],
+      'test' => ['data' => $this->t('Test'), 'field' => 't.test'],
       'firstname' => [
         'data' => $this->t('First name'),
         'field' => 't.firstname',
@@ -166,6 +168,7 @@ class RequestsController extends ControllerBase {
     foreach ($entries as $entry) {
       $rows[] = [
         'gid' => new Link($entry->gid, new Url('tragedy_commons.result', ['gid' => $entry->gid])),
+        'test' => $entry->test ? 'Yes' : 'No',
         'firstname' => Html::escape($entry->firstname),
         'lastname' => new Link(Html::escape($entry->lastname), new Url('tragedy_commons.result', ['gid' => $entry->gid])),
         'email' => Html::escape($entry->email),

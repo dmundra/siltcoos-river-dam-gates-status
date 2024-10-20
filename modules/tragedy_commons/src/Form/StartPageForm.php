@@ -70,11 +70,11 @@ class StartPageForm extends FormBase implements FormInterface, ContainerInjectio
   /**
    * {@inheritDoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, $request = NULL, $test = FALSE) {
+  public function buildForm(array $form, FormStateInterface $form_state, $request = NULL) {
     $form = [];
 
     $form_state->set('request', $request);
-    $form_state->set('test', $test);
+    $form_state->set('test', $request->test);
 
     $form['introduction'] = [
       '#markup' => $this->t('To start to play the <strong><em>Tragedy of the Commons Game for @firstname @lastname (:gid)</em></strong>, fill in the following form and then click on the Submit button at the bottom of the form.', [
@@ -84,7 +84,7 @@ class StartPageForm extends FormBase implements FormInterface, ContainerInjectio
       ]),
     ];
 
-    if ($test) {
+    if ($request->test) {
       $form['test_intro'] = [
         '#markup' => $this->t('<p><strong><em>This is a test play through.</em></strong></p>'),
       ];
@@ -150,11 +150,7 @@ class StartPageForm extends FormBase implements FormInterface, ContainerInjectio
         '@firstname' => $player['firstname'],
         '@lastname' => $player['lastname'],
       ]));
-      $query = [];
-      if ($test) {
-        $query['test'] = TRUE;
-      }
-      $form_state->setRedirect('tragedy_commons.gamespace_player', ['gid' => $gid, 'pid' => $return], ['query' => $query]);
+      $form_state->setRedirect('tragedy_commons.gamespace_player', ['gid' => $gid, 'pid' => $return]);
     }
   }
 

@@ -71,6 +71,14 @@ function tragedy_commons_schema() {
         'not null' => TRUE,
         'default' => 0,
       ],
+      'test' => [
+        'description' => 'Boolean indicating whether this request is a test.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+        'size' => 'tiny',
+      ],
     ],
     'primary key' => ['gid'],
   ];
@@ -342,5 +350,23 @@ function tragedy_commons_update_8006(&$sandbox) {
       'default' => 0,
     ];
     $schema->addField('tragedy_commons_multi_round', 'round_number', $round_number_spec);
+  }
+}
+
+/**
+ * Add test columns to table for tracking requests.
+ */
+function tragedy_commons_update_8007(&$sandbox) {
+  $schema = Database::getConnection()->schema();
+  if (!$schema->fieldExists('tragedy_commons_multi', 'test')) {
+    $test_spec = [
+      'description' => 'Boolean indicating whether this request is a test.',
+      'type' => 'int',
+      'unsigned' => TRUE,
+      'not null' => TRUE,
+      'default' => 0,
+      'size' => 'tiny',
+    ];
+    $schema->addField('tragedy_commons_multi', 'test', $test_spec);
   }
 }

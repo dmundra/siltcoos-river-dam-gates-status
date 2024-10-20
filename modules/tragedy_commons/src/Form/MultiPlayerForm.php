@@ -68,8 +68,8 @@ class MultiPlayerForm extends FormBase implements FormInterface, ContainerInject
       '#title' => $this->t('Enter Password'),
       '#required' => TRUE,
       '#description' => $this->t('You will then be sent to a page to fill
-in your name and start the game. <i>If you were returned to this page after
-entering a password, you have entered an invalid password. Please try again.</i>'),
+in your name and start the game. <em>If you were returned to this page after
+entering a password, you have entered an invalid password. Please try again.</em>'),
     ];
 
     $form['submit'] = [
@@ -89,7 +89,6 @@ entering a password, you have entered an invalid password. Please try again.</i>
 
     $last_name = $split[0];
     $gid = $split[1] ?? FALSE;
-    $test = $split[2] ?? FALSE;
     $valid = FALSE;
 
     if ($gid) {
@@ -97,11 +96,7 @@ entering a password, you have entered an invalid password. Please try again.</i>
       if (!empty($entries)) {
         foreach ($entries as $entry) {
           if (strtolower($last_name) === strtolower($entry->lastname)) {
-            $query = [];
-            if ($test && $test === 'test') {
-              $query['test'] = TRUE;
-            }
-            $form_state->setRedirect('tragedy_commons.gamespace', ['gid' => $gid], ['query' => $query]);
+            $form_state->setRedirect('tragedy_commons.gamespace', ['gid' => $gid]);
             $valid = TRUE;
           }
         }
