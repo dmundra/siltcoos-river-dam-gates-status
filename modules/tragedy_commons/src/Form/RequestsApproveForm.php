@@ -134,15 +134,11 @@ class RequestsApproveForm extends FormBase implements FormInterface, ContainerIn
       $language_code = $this->languageManager->getDefaultLanguage()->getId();
 
       $result = $this->mailManager->mail($module, 'request_approved', $to, $language_code, $params, $from);
-      if ($result['result']) {
-        $this->messenger()->addMessage($this->t('Request approved email sent to @email.', [
-          '@email' => $to,
-        ]));
-      }
-      else {
-        $this->messenger()->addMessage($this->t('There was a problem sending request approved email to @email and it was not sent.', [
-          '@email' => $to,
-        ]), 'error');
+      if (!$result['result']) {
+        $this->messenger()
+          ->addMessage($this->t('There was a problem sending request approved email to @email and it was not sent.', [
+            '@email' => $to,
+          ]), 'error');
       }
     }
   }

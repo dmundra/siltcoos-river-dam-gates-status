@@ -84,10 +84,6 @@ class StartPageForm extends FormBase implements FormInterface, ContainerInjectio
       ]),
     ];
 
-    if ($request->test) {
-      $this->messenger()->addWarning($this->t('This is a test play through.'));
-    }
-
     $form['firstname'] = [
       '#type' => 'textfield',
       '#title' => $this->t('First Name'),

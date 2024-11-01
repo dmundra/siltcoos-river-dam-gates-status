@@ -222,16 +222,11 @@ Web: <a href="https://ronaldbmitchell.com/">https://ronaldbmitchell.com/</a><br/
       $language_code = $this->languageManager->getDefaultLanguage()->getId();
 
       $result = $this->mailManager->mail($module, 'request_approved', $to, $language_code, $params, $from);
-      if ($result['result']) {
-        $this->messenger()->addMessage($this->t('Request approved email sent to @email.', [
-          '@email' => $to,
-        ]));
-        $form_state->setRedirect('tragedy_commons.requests_instructions');
-      }
-      else {
-        $this->messenger()->addMessage($this->t('There was a problem sending request approved email to @email and it was not sent.', [
-          '@email' => $to,
-        ]), 'error');
+      if (!$result['result']) {
+        $this->messenger()
+          ->addMessage($this->t('There was a problem sending request approved email to @email and it was not sent.', [
+            '@email' => $to,
+          ]), 'error');
       }
     }
   }

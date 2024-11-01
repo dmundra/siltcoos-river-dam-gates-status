@@ -182,15 +182,11 @@ if you do not want names printed for any rounds)</em>'),
       $params['results_page'] = $results_page->toString();
 
       $result = $this->mailManager->mail($module, 'game_played', $to, $language_code, $params, $from);
-      if ($result['result']) {
-        $this->messenger()->addMessage($this->t('Round played email sent to @email.', [
-          '@email' => $to,
-        ]));
-      }
-      else {
-        $this->messenger()->addMessage($this->t('There was a problem sending round played email to @email and it was not sent.', [
-          '@email' => $to,
-        ]), 'error');
+      if (!$result['result']) {
+        $this->messenger()
+          ->addMessage($this->t('There was a problem sending round played email to @email and it was not sent.', [
+            '@email' => $to,
+          ]), 'error');
       }
     }
     else {

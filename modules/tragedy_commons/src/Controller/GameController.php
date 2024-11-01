@@ -214,10 +214,6 @@ directed to that page, you will need to click on your browser\'s BACK button to
 return to this page to process the next round of results.</em>'),
         ];
 
-        if ($entry->test) {
-          $this->messenger()->addWarning($this->t('This is a test play through.'));
-        }
-
         $content['result'] = [
           '#theme' => 'item_list',
           '#items' => $items,
@@ -284,10 +280,6 @@ return to this page to process the next round of results.</em>'),
             ];
 
             $content['player_intro']['#attached']['library'][] = 'tragedy_commons/games';
-
-            if ($request->test) {
-              $this->messenger()->addWarning($this->t('This is a test play through.'));
-            }
 
             $items = [
               $this->t('Cows cost $100 each.'),
@@ -459,10 +451,6 @@ return to this page to process the next round of results.</em>'),
                   ]))->toString(),
                 ];
                 $content['intro']['#attached']['library'][] = 'tragedy_commons/wait';
-
-                if ($request->test) {
-                  $this->messenger()->addWarning($this->t('This is a test play through.'));
-                }
               }
             }
             else {
@@ -540,10 +528,6 @@ return to this page to process the next round of results.</em>'),
           '#type' => 'markup',
           '#markup' => $this->t('<p>The green area is the size of the commons. When just filled with cows, the collectively optimal number of cows is on the commons. Green area without cows indicates that grazing MORE cows would increase community milk production. Grey cows indicate that too many cows are being grazed and grazing FEWER cows would increase community milk production.</p><p>* = optimal would max total milk production</p>'),
         ];
-
-        if ($entry->test) {
-          $this->messenger()->addWarning($this->t('This is a test play through.'));
-        }
 
         $content['intro']['#attached']['library'][] = 'tragedy_commons/results';
 
