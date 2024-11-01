@@ -85,9 +85,7 @@ class StartPageForm extends FormBase implements FormInterface, ContainerInjectio
     ];
 
     if ($request->test) {
-      $form['test_intro'] = [
-        '#markup' => $this->t('<p><strong><em>This is a test play through.</em></strong></p>'),
-      ];
+      $this->messenger()->addWarning($this->t('This is a test play through.'));
     }
 
     $form['firstname'] = [

@@ -21,6 +21,7 @@
 }
 .cows-column.right {
   width: 420px;
+  min-width: 420px;
 }
 @media (min-width: 768px) {
   .cows-row {

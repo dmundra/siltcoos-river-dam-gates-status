@@ -215,7 +215,7 @@ return to this page to process the next round of results.</em>'),
         ];
 
         if ($entry->test) {
-          $items[] = $this->t('<p><strong><em>This is a test play through.</em></strong></p>');
+          $this->messenger()->addWarning($this->t('This is a test play through.'));
         }
 
         $content['result'] = [
@@ -286,10 +286,7 @@ return to this page to process the next round of results.</em>'),
             $content['player_intro']['#attached']['library'][] = 'tragedy_commons/games';
 
             if ($request->test) {
-              $content['test_intro'] = [
-                '#type' => 'markup',
-                '#markup' => $this->t('<p><strong><em>This is a test play through.</em></strong></p>'),
-              ];
+              $this->messenger()->addWarning($this->t('This is a test play through.'));
             }
 
             $items = [
@@ -318,7 +315,6 @@ return to this page to process the next round of results.</em>'),
 
             $rows = [];
             $header = [
-              'rid' => ['data' => $this->t('Id'), 'field' => 'r.rid'],
               'round_number' => ['data' => $this->t('Round #'), 'field' => 'r.round_number'],
               'cows' => [
                 'data' => $this->t('Number of cows'),
@@ -327,9 +323,6 @@ return to this page to process the next round of results.</em>'),
               'revenue' => $this->t('Revenue or Loss'),
               'profit' => $this->t('Profit Per Cow'),
               'started' => ['data' => $this->t('Started'), 'field' => 'r.started', 'sort' => 'desc'],
-              'updated' => ['data' => $this->t('Updated'), 'field' => 'r.updated'],
-              'completed' => ['data' => $this->t('Completed'), 'field' => 'r.completed'],
-              'show_names' => ['data' => $this->t('Show names'), 'field' => 'r.show_names'],
             ];
 
             $query = $this->database->select('tragedy_commons_multi_round', 'r')
@@ -373,19 +366,15 @@ return to this page to process the next round of results.</em>'),
               }
 
               $rows[] = [
-                'rid' => new Link($round->rid, new Url('tragedy_commons.gamespace_wait', [
+                'round_number' => new Link($round->round_number > 0 ? $round->round_number : $this->t('TBD'), new Url('tragedy_commons.gamespace_wait', [
                   'gid' => $gid,
                   'pid' => $pid,
                   'rid' => $round->rid,
                 ])),
-                'round_number' => $round->round_number > 0 ? $round->round_number : $this->t('TBD'),
                 'cows' => Html::escape($round->cows),
-                'revenue' => $average_revenue > 0 ? round($round->cows * ($average_revenue - $cost), 2) : $this->t('TBD'),
-                'profit' => $average_revenue > 0 ? round($average_revenue - 100, 2) : $this->t('TBD'),
+                'revenue' => $round->round_number > 0 ? round($round->cows * ($average_revenue - $cost), 2) : $this->t('TBD'),
+                'profit' => $round->round_number > 0 ? round($average_revenue - 100, 2) : $this->t('TBD'),
                 'started' => date('m/d/Y', $round->started),
-                'updated' => date('m/d/Y', $round->updated),
-                'completed' => $completed_text,
-                'show_names' => $round->show_names ? $this->t('Yes') : $this->t('No'),
               ];
             }
 
@@ -472,10 +461,7 @@ return to this page to process the next round of results.</em>'),
                 $content['intro']['#attached']['library'][] = 'tragedy_commons/wait';
 
                 if ($request->test) {
-                  $content['test_intro'] = [
-                    '#type' => 'markup',
-                    '#markup' => $this->t('<p><strong><em>This is a test play through.</em></strong></p>'),
-                  ];
+                  $this->messenger()->addWarning($this->t('This is a test play through.'));
                 }
               }
             }
@@ -554,6 +540,10 @@ return to this page to process the next round of results.</em>'),
           '#type' => 'markup',
           '#markup' => $this->t('<p>The green area is the size of the commons. When just filled with cows, the collectively optimal number of cows is on the commons. Green area without cows indicates that grazing MORE cows would increase community milk production. Grey cows indicate that too many cows are being grazed and grazing FEWER cows would increase community milk production.</p><p>* = optimal would max total milk production</p>'),
         ];
+
+        if ($entry->test) {
+          $this->messenger()->addWarning($this->t('This is a test play through.'));
+        }
 
         $content['intro']['#attached']['library'][] = 'tragedy_commons/results';
 

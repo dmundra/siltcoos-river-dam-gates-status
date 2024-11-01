@@ -146,6 +146,25 @@ if you do not want names printed for any rounds)</em>'),
       'round_number' => $round_number,
     ];
     $return = $this->repository->updateRoundsInGame($entry);
+
+    // Enable names for any previous rounds if provided.
+    if (is_array($rounds_with_names)) {
+      foreach ($rounds_with_names as $round_number_to_update) {
+        $this->database->update('tragedy_commons_multi_round')
+          ->fields(['show_names' => 1])
+          ->condition('gid', $request->gid)
+          ->condition('round_number', $round_number_to_update)
+          ->execute();
+      }
+    }
+    else {
+      $this->database->update('tragedy_commons_multi_round')
+        ->fields(['show_names' => 1])
+        ->condition('gid', $request->gid)
+        ->condition('round_number', $rounds_with_names)
+        ->execute();
+    }
+
     if ($return) {
       $this->messenger()
         ->addMessage($this->t('You have successfully completed round @round_number for the Tragedy of the Commons game for @gid', [
