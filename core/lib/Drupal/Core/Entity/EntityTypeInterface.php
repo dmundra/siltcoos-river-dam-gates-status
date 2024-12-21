@@ -424,7 +424,7 @@ interface EntityTypeInterface extends PluginDefinitionInterface {
    *   placeholder of {node_type} used on the Node class.
    *
    * Specific entity types may also expand upon this list by overriding the
-   * Entity::urlRouteParameters() method.
+   * EntityBase::urlRouteParameters() method.
    *
    * @link http://www.iana.org/assignments/link-relations/link-relations.xml @endlink
    * @link http://tools.ietf.org/html/rfc6570 @endlink
@@ -480,15 +480,15 @@ interface EntityTypeInterface extends PluginDefinitionInterface {
   public function getBundleEntityType();
 
   /**
-   * Gets the entity type for which this entity provides bundles.
+   * Gets the entity type ID for which this entity provides bundles.
    *
    * It can be used by other modules to act accordingly; for example,
    * the Field UI module uses it to add operation links to manage fields and
    * displays.
    *
    * @return string|null
-   *   The entity type for which this entity provides bundles, or NULL if does
-   *   not provide bundles for another entity type.
+   *   The entity type ID for which this entity provides bundles, or NULL if
+   *   does not provide bundles for another entity type.
    */
   public function getBundleOf();
 

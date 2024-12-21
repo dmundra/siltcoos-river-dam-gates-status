@@ -5,6 +5,8 @@
  * Update hooks and schema definition for the update_test_schema module.
  */
 
+declare(strict_types=1);
+
 use Drupal\Core\Update\EquivalentUpdate;
 
 if (\Drupal::state()->get('equivalent_update_test_last_removed', FALSE)) {
@@ -12,7 +14,7 @@ if (\Drupal::state()->get('equivalent_update_test_last_removed', FALSE)) {
   /**
    * Implements hook_update_last_removed().
    */
-  function equivalent_update_test_update_last_removed() {
+  function equivalent_update_test_update_last_removed(): int {
     return \Drupal::state()->get('equivalent_update_test_update_last_removed', 100000);
   }
 

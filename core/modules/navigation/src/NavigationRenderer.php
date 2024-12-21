@@ -18,8 +18,7 @@ use Drupal\Core\Menu\LocalTaskManagerInterface;
 use Drupal\Core\Plugin\Context\Context;
 use Drupal\Core\Plugin\Context\ContextDefinition;
 use Drupal\Core\Routing\RouteMatchInterface;
-use Drupal\file\Entity\File;
-use Drupal\file\FileInterface;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\layout_builder\SectionStorage\SectionStorageManagerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -73,6 +72,7 @@ final class NavigationRenderer {
     private SectionStorageManagerInterface $sectionStorageManager,
     private RequestStack $requestStack,
     private ModuleExtensionList $moduleExtensionList,
+    private AccountInterface $currentUser,
   ) {}
 
   /**
@@ -144,12 +144,11 @@ final class NavigationRenderer {
     $page_top['navigation'] = $build;
 
     if ($logo_provider === self::LOGO_PROVIDER_CUSTOM) {
-      $logo_managed = File::load($logo_settings->get('logo.managed'));
-      if ($logo_managed instanceof FileInterface) {
-        $logo_managed_uri = $logo_managed->getFileUri();
-        $logo_managed_url = $this->fileUrlGenerator->generateAbsoluteString($logo_managed_uri);
+      $logo_path = $logo_settings->get('logo.path');
+      if (!empty($logo_path) && is_file($logo_path)) {
+        $logo_managed_url = $this->fileUrlGenerator->generateAbsoluteString($logo_path);
+        $image = $this->imageFactory->get($logo_path);
         $page_top['navigation'][0]['settings']['logo_path'] = $logo_managed_url;
-        $image = $this->imageFactory->get($logo_managed_uri);
         if ($image->isValid()) {
           $page_top['navigation'][0]['settings']['logo_width'] = $image->getWidth();
           $page_top['navigation'][0]['settings']['logo_height'] = $image->getHeight();
@@ -173,32 +172,13 @@ final class NavigationRenderer {
     }
 
     $page_top['top_bar'] = [
-      '#theme' => 'top_bar',
-      '#attached' => [
-        'library' => [
-          'navigation/internal.navigation',
-        ],
-      ],
+      '#type' => 'top_bar',
+      '#access' => $this->currentUser->hasPermission('access navigation'),
       '#cache' => [
-        'contexts' => [
-          'url.path',
-          'user.permissions',
-        ],
+        'keys' => ['top_bar'],
+        'contexts' => ['user.permissions'],
       ],
     ];
-
-    // Local tasks for content entities.
-    if ($this->hasLocalTasks()) {
-      $local_tasks = $this->getLocalTasks();
-      $page_top['top_bar']['#local_tasks'] = [
-        '#theme' => 'top_bar_local_tasks',
-        '#local_tasks' => $local_tasks['tasks'],
-      ];
-      assert($local_tasks['cacheability'] instanceof CacheableMetadata);
-      CacheableMetadata::createFromRenderArray($page_top['top_bar'])
-        ->addCacheableDependency($local_tasks['cacheability'])
-        ->applyTo($page_top['top_bar']);
-    }
   }
 
   /**
@@ -230,7 +210,7 @@ final class NavigationRenderer {
    * @return array
    *   Local tasks keyed by route name.
    */
-  private function getLocalTasks(): array {
+  public function getLocalTasks(): array {
     if (isset($this->localTasks)) {
       return $this->localTasks;
     }
@@ -282,7 +262,7 @@ final class NavigationRenderer {
    * @return bool
    *   TRUE if there are local tasks available for the top bar, FALSE otherwise.
    */
-  private function hasLocalTasks(): bool {
+  public function hasLocalTasks(): bool {
     $local_tasks = $this->getLocalTasks();
     return !empty($local_tasks['tasks']);
   }

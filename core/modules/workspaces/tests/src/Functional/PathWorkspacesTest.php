@@ -30,6 +30,7 @@ class PathWorkspacesTest extends BrowserTestBase {
     'node',
     'path',
     'workspaces',
+    'workspaces_ui',
   ];
 
   /**
@@ -74,8 +75,8 @@ class PathWorkspacesTest extends BrowserTestBase {
 
     $this->setupWorkspaceSwitcherBlock();
 
-    // The \Drupal\path_alias\AliasWhitelist service performs cache clears after
-    // Drupal has flushed the response to the client. We use
+    // The \Drupal\path_alias\AliasPrefixList service performs cache clears
+    // after Drupal has flushed the response to the client. We use
     // WaitTerminateTestTrait to wait for Drupal to do this before continuing.
     $this->setWaitForTerminate();
   }
