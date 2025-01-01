@@ -648,7 +648,8 @@ return to this page to process the next round of results.</em>'),
             ];
 
             $commons = '';
-            $tens = substr($all_animals, 0, -1);
+            echo $all_animals;
+            $tens = $all_animals > 9 ? substr($all_animals, 0, -1) : 0;
             $ones = substr($all_animals, -1);
             $fulllines = $tens / 2;
             if (substr($fulllines, -2) == '.5') {

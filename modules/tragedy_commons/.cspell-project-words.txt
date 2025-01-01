@@ -31,3 +31,4 @@ partlines
 mitchella
 mitchellb
 mitchellc
+varchar

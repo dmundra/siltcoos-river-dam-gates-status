@@ -150,11 +150,13 @@ if you do not want names printed for any rounds)</em>'),
     // Enable names for any previous rounds if provided.
     if (is_array($rounds_with_names)) {
       foreach ($rounds_with_names as $round_number_to_update) {
-        $this->database->update('tragedy_commons_multi_round')
-          ->fields(['show_names' => 1])
-          ->condition('gid', $request->gid)
-          ->condition('round_number', $round_number_to_update)
-          ->execute();
+        if (!empty($round_number_to_update)) {
+          $this->database->update('tragedy_commons_multi_round')
+            ->fields(['show_names' => 1])
+            ->condition('gid', $request->gid)
+            ->condition('round_number', $round_number_to_update)
+            ->execute();
+        }
       }
     }
     else {
