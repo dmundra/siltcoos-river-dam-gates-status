@@ -3,6 +3,7 @@
 namespace Drupal\tragedy_commons\Form;
 
 use Drupal\Component\Datetime\TimeInterface;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Form\FormBase;
@@ -173,6 +174,10 @@ if you do not want names printed for any rounds)</em>'),
           '@round_number' => $round_number,
           '@gid' => $request->gid,
         ]));
+
+      // Invalidate results page cache both players and game results page.
+      Cache::invalidateTags(['tragedy_commons_results_' . $request->gid]);
+
       $form_state->setRedirect('tragedy_commons.gamespace_results', ['gid' => $request->gid]);
 
       // Send email to requester.

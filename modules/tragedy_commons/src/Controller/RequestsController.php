@@ -186,6 +186,7 @@ class RequestsController extends ControllerBase {
       '#empty' => $this->t('No entries available.'),
       '#caption' => $this->t('Submitted requests'),
     ];
+
     // Don't cache this page.
     $content['#cache']['max-age'] = 0;
 

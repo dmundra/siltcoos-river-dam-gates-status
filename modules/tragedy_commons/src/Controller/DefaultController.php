@@ -2,7 +2,6 @@
 
 namespace Drupal\tragedy_commons\Controller;
 
-use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Form\FormBuilder;
 use Drupal\Core\Url;
@@ -52,17 +51,16 @@ class DefaultController extends ControllerBase {
 
     $output['intro'] = [
       '#type' => 'markup',
-      '#markup' => new FormattableMarkup('<p>These are some games that I have created to be played by students in a class to illustrate the tragedy of the commons, made famous by <a href="https://www.jstor.org/stable/1724745">Garrett Hardin in 1968</a> in Science magazine. If you want to get a feel for the game, you can try single-person versions of these Tragedy of the Commons games by clicking below: </p><h2>Request Form</h2><p>If you are a teacher or professor and want to use the multi-person version of the game, <a href="@url">Fill out the REQUEST FORM</a>.</p>', [
-        '@url' => (new Url('tragedy_commons.requests'))->toString(),
-      ]),
+      '#markup' => '<p>These are some games that I have created to be played by students in a class to illustrate the tragedy of the commons, made famous by <a href="https://www.jstor.org/stable/1724745">Garrett Hardin in 1968</a> in Science magazine. If you want to get a feel for the game, you can try single-person versions of these Tragedy of the Commons games by clicking below: </p>',
     ];
 
     $output['single'] = [
-      '#type' => 'details',
-      '#title' => 'Single person games',
+      '#type' => 'html_tag',
+      '#tag' => 'h3',
+      '#value' => 'Single person games',
     ];
 
-    $output['single']['list'] = [
+    $output['single_list'] = [
       '#theme' => 'item_list',
       '#list_type' => 'ul',
       '#items' => [
@@ -76,15 +74,18 @@ class DefaultController extends ControllerBase {
     ];
 
     $output['multi-into'] = [
-      '#type' => 'details',
-      '#title' => 'Setting up the Multi-person Tragedy of the Commons game',
+      '#type' => 'html_tag',
+      '#tag' => 'h3',
+      '#value' => 'Setting up the Multi-person Tragedy of the Commons game',
     ];
 
-    $output['multi-into']['list'] = [
+    $output['multi-into_list'] = [
       '#theme' => 'item_list',
       '#list_type' => 'ul',
       '#items' => [
-        $this->t('I can set this up if you are a professor or teacher and would like to use it for your class. The REQUEST FORM is the fifth bullet below, but please read the other four first.'),
+        $this->t('If you are a teacher or professor and want to use the multi-person version of the game, <a href="@url">Fill out the REQUEST FORM</a>.', [
+          '@url' => (new Url('tragedy_commons.requests'))->toString(),
+        ]),
         $this->t('For more about using the multi-person game for educational purposes, read the <a href="https://ronaldbmitchell.com/commons/instructions/">instructions</a> before filling out the request form below.'),
         $this->t("<a href='https://ronaldbmitchell.com/commons/practice_instructions'>Example pages</a> of the game once it's been played."),
         $this->t('My <a href="https://ronaldbmitchell.com/wp-content/uploads/2024/01/04-lawecontoc.pdf" target="_blank">lecture notes</a> and PowerPoint for when I run the game simulation in my class.'),
@@ -94,8 +95,9 @@ class DefaultController extends ControllerBase {
     ];
 
     $output['multi-play'] = [
-      '#type' => 'details',
-      '#title' => 'Playing the Multi-person Tragedy of the Commons game',
+      '#type' => 'html_tag',
+      '#tag' => 'h3',
+      '#value' => 'Playing the Multi-person Tragedy of the Commons game',
     ];
 
     $multi_player_form = $this->formBuilder->getForm('Drupal\tragedy_commons\Form\MultiPlayerForm');
@@ -110,7 +112,7 @@ class DefaultController extends ControllerBase {
       $this->t('If there is a problem with the multi-person version, email me at <a href="mailto:rmitchel@uoregon.edu">rmitchel@uoregon.edu</a>.'),
     ];
 
-    $output['multi-play']['list'] = [
+    $output['multi-play_list'] = [
       '#theme' => 'item_list',
       '#list_type' => 'ul',
       '#items' => $items,

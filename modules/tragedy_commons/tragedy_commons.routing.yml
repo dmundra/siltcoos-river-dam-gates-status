@@ -120,13 +120,13 @@ tragedy_commons.result:
     _permission: 'view tragedy of the commons results'
   options:
     _admin_route: TRUE
-#
-#tragedy_commons.config_form:
-#  path: '/admin/config/development/tragedy_of_the_commons/settings'
-#  defaults:
-#    _form: '\Drupal\tragedy_commons\Form\TragedyCommonsConfigForm'
-#    _title: 'Tragedy of the Commons Settings'
-#  requirements:
-#    _permission: 'administer tragedy of the commons'
-#  options:
-#    _admin_route: TRUE
+
+tragedy_commons.config_form:
+  path: '/admin/config/development/tragedy_of_the_commons/settings'
+  defaults:
+    _form: '\Drupal\tragedy_commons\Form\TragedyCommonsConfigForm'
+    _title: 'Tragedy of the Commons Settings'
+  requirements:
+    _permission: 'administer tragedy of the commons'
+  options:
+    _admin_route: TRUE

@@ -170,8 +170,8 @@ class GameController extends ControllerBase {
       ];
     }
 
-    // Don't cache this page.
-    $content['#cache']['max-age'] = 0;
+    // Custom cache tag for players list page.
+    $content['#cache']['tags'] = ['tragedy_commons_players_' . $gid];
 
     return $content;
   }
@@ -227,8 +227,8 @@ return to this page to process the next round of results.</em>'),
       ];
     }
 
-    // Don't cache this page.
-    $content['#cache']['max-age'] = 0;
+    // Custom cache tag for manage page.
+    $content['#cache']['tags'] = ['tragedy_commons_manage_' . $gid];
 
     return $content;
   }
@@ -412,8 +412,11 @@ return to this page to process the next round of results.</em>'),
       ];
     }
 
-    // Don't cache this page.
-    $content['#cache']['max-age'] = 0;
+    // Custom cache tags for players results and game page.
+    $content['#cache']['tags'] = [
+      'tragedy_commons_results_' . $gid,
+      'tragedy_commons_results_' . $gid . '_' . $pid,
+    ];
 
     return $content;
   }
@@ -475,9 +478,6 @@ return to this page to process the next round of results.</em>'),
         '#markup' => $this->t('<em>Game not found</em>.'),
       ];
     }
-
-    // Don't cache this page.
-    $content['#cache']['max-age'] = 0;
 
     return $content;
   }
@@ -648,7 +648,6 @@ return to this page to process the next round of results.</em>'),
             ];
 
             $commons = '';
-            echo $all_animals;
             $tens = $all_animals > 9 ? substr($all_animals, 0, -1) : 0;
             $ones = substr($all_animals, -1);
             $fulllines = $tens / 2;
@@ -698,8 +697,8 @@ return to this page to process the next round of results.</em>'),
       ];
     }
 
-    // Don't cache this page.
-    $content['#cache']['max-age'] = 0;
+    // Custom cache tag for main results page.
+    $content['#cache']['tags'] = ['tragedy_commons_results_' . $gid];
 
     return $content;
   }

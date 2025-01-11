@@ -18,17 +18,8 @@ tragedy_commons.pdgame2:
   parent: tragedy_commons.base
   weight: 20
 
-# Results page.
 tragedy_commons.results:
-  title: 'Tragedy of the Commons Game Requests'
+  title: 'Tragedy of the Commons Game Requests & Settings'
   route_name: tragedy_commons.results
-  description: 'Table of requests.'
-  parent: system.admin_config_development
-  weight: 5
-
-#tragedy_commons.config_form:
-#  title: 'Tragedy of the Commons Settings'
-#  route_name: tragedy_commons.config_form
-#  description: 'Manage settings for Tragedy of the Commons'
-#  parent: tragedy_commons.base
-#  weight: 10
+  description: 'Table of requests and settings.'
+  parent: system.admin_config_system

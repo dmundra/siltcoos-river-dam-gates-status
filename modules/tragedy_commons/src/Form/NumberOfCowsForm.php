@@ -3,6 +3,7 @@
 namespace Drupal\tragedy_commons\Form;
 
 use Drupal\Component\Datetime\TimeInterface;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormInterface;
@@ -116,6 +117,10 @@ class NumberOfCowsForm extends FormBase implements FormInterface, ContainerInjec
     $return = $this->repository->insertRound($round);
     if ($return) {
       $this->messenger()->addMessage($this->t('Thanks for playing another round of the game.'));
+
+      // Invalidate the players page.
+      Cache::invalidateTags(['tragedy_commons_results_' . $gid . '_' . $pid]);
+
       $form_state->setRedirect('tragedy_commons.gamespace_wait', ['gid' => $gid, 'pid' => $pid, 'rid' => $return]);
     }
   }

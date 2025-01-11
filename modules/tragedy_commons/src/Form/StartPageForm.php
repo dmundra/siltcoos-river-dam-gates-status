@@ -3,6 +3,7 @@
 namespace Drupal\tragedy_commons\Form;
 
 use Drupal\Component\Datetime\TimeInterface;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormInterface;
@@ -144,6 +145,10 @@ class StartPageForm extends FormBase implements FormInterface, ContainerInjectio
         '@firstname' => $player['firstname'],
         '@lastname' => $player['lastname'],
       ]));
+
+      // Invalidate start page that lists players.
+      Cache::invalidateTags(['tragedy_commons_players_' . $gid]);
+
       $form_state->setRedirect('tragedy_commons.gamespace_player', ['gid' => $gid, 'pid' => $return]);
     }
   }

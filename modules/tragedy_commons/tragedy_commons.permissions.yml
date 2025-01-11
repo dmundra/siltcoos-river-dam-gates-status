@@ -18,7 +18,7 @@ view tragedy of the commons results:
 #  description: 'Allow users with role to delete individual Tragedy of the Commons results.'
 #  restrict access: false
 
-#administer tragedy of the commons:
-#  title: 'Administer Tragedy of the Commons settings'
-#  description: 'Allow access to the module settings'
-#  restrict access: false
+administer tragedy of the commons:
+  title: 'Administer Tragedy of the Commons settings'
+  description: 'Allow access to the module settings'
+  restrict access: false

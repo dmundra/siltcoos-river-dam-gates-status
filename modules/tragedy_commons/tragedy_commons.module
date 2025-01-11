@@ -5,6 +5,7 @@
  * Drupal hooks for supporting tragedy_commons operations.
  */
 
+use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Url;
@@ -39,6 +40,7 @@ function tragedy_commons_mail($key, &$message, $params) {
   $options = [
     'langcode' => $message['langcode'],
   ];
+  $config = \Drupal::config('tragedy_commons.settings');
 
   switch ($key) {
     case 'request':
@@ -153,6 +155,10 @@ Eugene, OR 97503-1284
 Tel: 541-346-4880
 Email: rmitchel@uoregon.edu
 Web: https://ronaldbmitchell.com/', $email_string_params, $options);
+      $request_approved_email = $config->get('request_approved_email');
+      if (!empty($request_approved_email)) {
+        $body = new FormattableMarkup($request_approved_email, $email_string_params);
+      }
       $message['body'][] = Html::escape($body);
       break;
 
