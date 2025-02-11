@@ -3,7 +3,7 @@ description: 'Provides nicer, more logical and user friendly filemime names'
 type: module
 core_version_requirement: ^8 || ^9 || ^10 || ^11
 
-# Information added by Drupal.org packaging script on 2024-08-26
-version: '2.0.2'
+# Information added by Drupal.org packaging script on 2025-02-11
+version: '2.0.3'
 project: 'nice_filemime'
-datestamp: 1724683700
+datestamp: 1739232072

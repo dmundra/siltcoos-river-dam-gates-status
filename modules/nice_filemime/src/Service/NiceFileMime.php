@@ -11,6 +11,13 @@ use Symfony\Component\Yaml\Yaml;
 class NiceFileMime {
 
   /**
+   * The configuration factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactory
+   */
+  protected $config;
+
+  /**
    * Create the NiceFileMime client.
    */
   public function __construct(ConfigFactory $configFactory) {
