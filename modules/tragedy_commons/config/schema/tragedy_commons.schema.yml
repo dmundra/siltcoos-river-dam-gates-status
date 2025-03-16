@@ -1,7 +1,0 @@
-tragedy_commons.settings:
-  type: config_object
-  label: 'Tragedy of the Commons settings'
-  mapping:
-    request_approved_email:
-      type: text
-      label: 'Request approved email'

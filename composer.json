@@ -24,7 +24,6 @@
         "drupal/core-vendor-hardening": "^9.1",
         "drupal/nice_filemime": "^2.0",
         "drupal/pathauto": "^1.9",
-        "drupal/tragedy_commons": "^1.0@alpha",
         "drush/drush": "^13"
     },
     "conflict": {

@@ -1,9 +1,0 @@
-tragedy_commons.results:
-  route_name: tragedy_commons.results
-  base_route: tragedy_commons.results
-  title: 'Requests'
-
-tragedy_commons.config_form:
-  route_name: tragedy_commons.config_form
-  title: 'Settings'
-  base_route: tragedy_commons.results
