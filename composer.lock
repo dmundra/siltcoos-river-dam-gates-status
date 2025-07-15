@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2f782ce40d707f7c2376d3992ae5172a",
+    "content-hash": "d61ac55399f9df08f2901e2f14052b9c",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1573,20 +1573,20 @@
         },
         {
             "name": "drupal/core-vendor-hardening",
-            "version": "9.5.11",
+            "version": "11.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drupal/core-vendor-hardening.git",
-                "reference": "8293a845c64f1faad0d44955611f8cce69320274"
+                "reference": "87bd2bf61f8c8a2e006bc2cbd8f88991342eb39a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drupal/core-vendor-hardening/zipball/8293a845c64f1faad0d44955611f8cce69320274",
-                "reference": "8293a845c64f1faad0d44955611f8cce69320274",
+                "url": "https://api.github.com/repos/drupal/core-vendor-hardening/zipball/87bd2bf61f8c8a2e006bc2cbd8f88991342eb39a",
+                "reference": "87bd2bf61f8c8a2e006bc2cbd8f88991342eb39a",
                 "shasum": ""
             },
             "require": {
-                "composer-plugin-api": "^1.1 || ^2",
+                "composer-plugin-api": "^2",
                 "php": ">=7.3.0"
             },
             "type": "composer-plugin",
@@ -1608,9 +1608,9 @@
                 "drupal"
             ],
             "support": {
-                "source": "https://github.com/drupal/core-vendor-hardening/tree/9.5.11"
+                "source": "https://github.com/drupal/core-vendor-hardening/tree/11.2.2"
             },
-            "time": "2022-12-07T11:22:43+00:00"
+            "time": "2025-03-03T14:03:21+00:00"
         },
         {
             "name": "drupal/ctools",
