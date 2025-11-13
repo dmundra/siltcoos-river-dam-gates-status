@@ -16,7 +16,7 @@
     ],
     "require": {
         "composer/installers": "^2.3",
-        "cweagans/composer-patches": "^1.7",
+        "cweagans/composer-patches": "^2.0",
         "drupal/auto_entitylabel": "^3.0@beta",
         "drupal/core-composer-scaffold": "^11",
         "drupal/core-project-message": "^11",
