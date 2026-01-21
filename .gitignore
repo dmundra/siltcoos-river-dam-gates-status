@@ -41,3 +41,10 @@ sites/simpletest
 # Ignore SimpleTest multi-site environment.
 # simpletest
 /README.md
+
+# Ignoring contrib modules.
+modules/auto_entitylabel
+modules/ctools
+modules/nice_filemime
+modules/pathauto
+modules/token
