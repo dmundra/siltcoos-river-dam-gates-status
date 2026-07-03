@@ -6,19 +6,12 @@
  */
 
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\srdgs_custom\Hook\SrdgsCustomHooks;
 
 /**
  * Implements hook_form_FORM_ID_alter().
- *
- * Backwards compatibility shim for Drupal < 11.1 which does not support
- * the #[Hook] attribute. On 11.1+ the OOP implementation in SrdgsCustomHooks
- * is auto-discovered and this function is skipped to prevent double-invocation.
  */
+#[LegacyHook]
 function srdgs_custom_form_node_dam_gates_status_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  if (!class_exists(Hook::class)) {
-    \Drupal::classResolver(SrdgsCustomHooks::class)
-      ->formNodeDamGatesStatusFormAlter($form, $form_state, $form_id);
-  }
+  \Drupal::service(SrdgsCustomHooks::class)->formNodeDamGatesStatusFormAlter($form, $form_state, $form_id);
 }
